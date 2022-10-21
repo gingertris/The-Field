@@ -1,5 +1,5 @@
 # Tris' Field
-Recreation of Psyonix x Rival Esports' The Field
+My attempt at a recreation of Psyonix x Rival Esports' The Field.
 
 # How will Tris’ field work?
 
