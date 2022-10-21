@@ -42,7 +42,7 @@ Queues will pop at the top of each hour. 21:00 is when the last queue will pop. 
 
 All queued teams will be sorted in order of Rating. Teams will be matched against teams of a similar rating in order to create fair, balanced and (hopefully) enjoyable matches.
 
-If there is an odd number of people in the queue, randomly select one team from the queue and remove them. Maybe give them a few points bonus for the inconvenience? It's a work in progress.
+If there is an odd number of people in the queue at the top of the hour, the last person to join the queue doesn't get a game.
 
 # Commands
 
