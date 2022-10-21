@@ -1,3 +1,5 @@
+//(shamelessly stolen from discord.js tutorial), with slight modifications
+
 import { REST, Routes } from 'discord.js'
 import dotenv from 'dotenv'
 dotenv.config()

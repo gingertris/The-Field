@@ -1,5 +1,5 @@
-import { Client, GatewayIntentBits, Events, Collection } from "discord.js";
-import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import { Client, GatewayIntentBits, Events, Collection } from "discord.js"
+import * as dotenv from 'dotenv'
 import sequelize from './utils/sequelize.js'
 import models from './utils/models.js'
 import commands from './utils/commands.js'
@@ -23,7 +23,7 @@ client.once(Events.ClientReady, () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-//load commands
+//load commands (shamelessly stolen from discord.js tutorial)
 for (const command of commands) {
 	// Set a new item in the Collection with the key as the command name and the value as the exported module
 	if ('data' in command && 'execute' in command) {
@@ -33,7 +33,7 @@ for (const command of commands) {
 	}
 }
 
-//handle interaction
+//handle interaction (shamelessly stolen from discord.js tutorial)
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
