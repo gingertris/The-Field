@@ -31,9 +31,6 @@ export class Team {
     @OneToMany(() => Player, (player) => player.team, {onDelete:"SET NULL"})
     players: Player[]
 
-    @OneToOne(() => Player, (player) => player.team, {eager:true, onDelete:"SET NULL"})
-    captain: Player
-
     @OneToMany(() => Invite, (invite) => invite.team)
     invites: Invite[]
 

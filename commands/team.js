@@ -19,7 +19,7 @@ export default {
                 team = await getTeam(interaction.options.getString("team"))
             } else{
                 const player = await getPlayer(interaction.user.id)
-                console.log(player)
+
                 if(!player.team){
                     interaction.reply({content:"You aren't currently in a team.", ephemeral:true});
                     return;
@@ -30,11 +30,13 @@ export default {
             let usernames = [];
             team.players.forEach(async p => usernames.push(await getUsername(interaction.client, p.id)));
 
+            let captainId = team.players.filter(player => player.captain)[0].id;
+
             const embed = new EmbedBuilder()
             .setColor("Fuchsia")
             .setTitle(`Info for ${team.name}`)
             .addFields(
-                {name: "Captain", value: `${await getUsername(interaction.client, team.captain.id)}`},
+                {name: "Captain", value: `${await getUsername(interaction.client, captainId)}`},
                 {name: "Members", value: `${usernames.join("\n")}`},
                 {name: "Region", value: `${team.region}`},
                 {name: "Division", value: `${team.division}`},

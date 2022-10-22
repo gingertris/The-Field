@@ -19,12 +19,14 @@ export default {
             interaction.reply({content:`You already aren't in a team.`, ephemeral:true});
             return
         }
+        
 
         const team = await getTeamByID(player.team.id);
         const members = team.players.length;
 
         if(captainCheck(player) && team.players.length > 1){
             interaction.reply({content:`You cannot leave a team you are the captain of, unless you are the only team member.\nPlease \`/transfer\` ownership of the team to someone else before leaving.`, ephemeral:true});
+            return
         }
 
         await leaveTeam(player);

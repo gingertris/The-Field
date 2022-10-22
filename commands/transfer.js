@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { getPlayer, transferOwnership , captainCheck, getTeam} from "../utils/helpers";
+import { getPlayer, transferOwnership , captainCheck, getTeam, getTeamByID} from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -27,11 +27,27 @@ export default {
             return;
         }
 
-        const team = await getTeam(captain.team.name);
-        const newOwner = await getPlayer(user.id);
 
+        let newOwner;
         try{
-            await transferOwnership(team, newOwner)
+            newOwner = await getPlayer(user.id);
+        } catch(err){
+            interaction.reply({content:`${err.message} Are they registered?`, ephemeral:true})
+            return
+        }
+
+        const team = await getTeamByID(captain.team.id);
+        
+        if(!newOwner.team){
+            interaction.reply({content:"The person you are transferring ownership to needs to already be on the team.", ephemeral:true});
+            return;
+        } else if(newOwner.team.id != team.id){
+            interaction.reply({content:"The person you are transferring ownership to needs to already be on the team.", ephemeral:true});
+            return;
+        }
+
+        try{ 
+            await transferOwnership(captain, newOwner)
         } catch (err){
             interaction.reply({content:err.message, ephemeral:true});
             return

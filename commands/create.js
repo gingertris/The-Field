@@ -33,7 +33,7 @@ export default {
         const teamname = interaction.options.getString("name");
 
         try{
-            await createTeam(teamname, interaction.user.id);
+            await createTeam(teamname, player);
         } catch (err){
             interaction.reply({content:err.message, ephemeral:true});
             return

@@ -20,4 +20,7 @@ export class Player{
 
     @OneToMany(() => Invite, (invite) => invite.player)
     invites: Invite[]
+
+    @Column()
+    captain: boolean
 }

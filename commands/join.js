@@ -17,7 +17,7 @@ export default {
             return
         }
 
-        const invites = player.invites.filter(i => !i.answered);
+        const invites = player.invites.filter(i => (!i.answered) && (i.team));
         //const teams = invites.map(async invite => await getTeamByID(invite.team.id))
         if(invites.length == 0){
             interaction.reply({content:"You have no invites.", ephemeral:true})

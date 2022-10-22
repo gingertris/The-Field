@@ -24,9 +24,10 @@ export const getPlayer = async (id: string) => {
 }
 
 export const registerPlayer = async (id: string, region: string) => {
-    let player = new Player()
-    player.id = id
-    player.region = region as Region
+    let player = new Player();
+    player.id = id;
+    player.region = region as Region;
+    player.captain = false;
     console.log(player.region)
     await PlayerRepository.save(player).catch(err => {
         throw err;
@@ -40,16 +41,14 @@ export const addPlayerToTeam = async (player: Player, team: Team) => {
 
 export const leaveTeam = async (player: Player) => {
     player.team = null;
+    player.captain = false;
     PlayerRepository.save(player);
 }
 
-export const createTeam = async (name: string, captain_id: string) => {
+export const createTeam = async (name: string, player: Player) => {
     let team = new Team();
-    let captain = await getPlayer(captain_id);
-    if(!captain) return null;
     team.name = name;
-    team.region = captain.region;
-    team.captain = captain;
+    team.region = player.region;
     await TeamRepository.save(team).catch(err => {
         if(err.code == "23505"){
             throw new Error(`Team name "${name}" is already taken. Please try a different team name.`);
@@ -58,7 +57,9 @@ export const createTeam = async (name: string, captain_id: string) => {
         }
         
     });
-    await addPlayerToTeam(captain, team);
+    await addPlayerToTeam(player, team);
+    player.captain = true
+    PlayerRepository.save(player);
 }
 
 export const getTeam = async (name: string) => {
@@ -67,8 +68,7 @@ export const getTeam = async (name: string) => {
             name:name
         },
         relations: {
-            players:true,
-            captain:true
+            players:true
         }
     })
     if(team) return team;
@@ -81,8 +81,7 @@ export const getTeamByID = async (id:number) => {
             id:id
         },
         relations: {
-            players:true,
-            captain:true
+            players:true
         }
     })
     if(team) return team;
@@ -96,9 +95,7 @@ export const getUsername = async (client: Client, user_id:string) => {
 }
 
 export const captainCheck = async (player: Player) => {
-    if(!player.team) return false;
-    const team = await getTeam(player.team.name);
-    return player.id == team.captain.id
+    return player.captain;
 }
 
 export const createInvite = async (player: Player, team: Team) => {
@@ -136,7 +133,8 @@ export const renameTeam = async (team: Team, name:string) => {
     TeamRepository.save(team);
 }
 
-export const transferOwnership = async (team: Team, player: Player) => {
-    team.captain = player;
-    TeamRepository.save(team);
+export const transferOwnership = async (oldOwner:Player, newOwner:Player) => {
+    oldOwner.captain = false;
+    newOwner.captain = true;
+    PlayerRepository.save([oldOwner, newOwner]);
 }
