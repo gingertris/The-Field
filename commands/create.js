@@ -16,9 +16,12 @@ export default {
         ),
     async execute(interaction){
 
-        const player = await getPlayer(interaction.user.id);
-        if(!player){
-            interaction.reply({content:"Player not found. Are you registered? Use the `/register` command to register before you can do anything else.", ephemeral:true})
+        
+        let player;
+        try{
+            player = await getPlayer(interaction.user.id);
+        } catch(err){
+            interaction.reply({content:`${err.message} Are you registered? Use the \`/register\` command to register before you can do anything else.`, ephemeral:true})
             return
         }
 

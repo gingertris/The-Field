@@ -5,6 +5,7 @@ import info from '../commands/info.js'
 import team from '../commands/team.js'
 import invite from '../commands/invite.js'
 import join from '../commands/join.js'
+import leave from '../commands/leave.js'
 const Commands = [
     test,
     create,
@@ -12,7 +13,8 @@ const Commands = [
     info,
     team,
     invite,
-    join
+    join,
+    leave
 ]
 
 export default Commands

@@ -13,10 +13,10 @@ export class Player{
         type:"enum",
         enum: Region
     })
-    region:Region
+    region: Region
 
     @ManyToOne(() => Team, (team) => team.players)
-    team: Team
+    team: Team | null
 
     @OneToMany(() => Invite, (invite) => invite.player)
     invites: Invite[]

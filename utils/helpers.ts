@@ -38,6 +38,11 @@ export const addPlayerToTeam = async (player: Player, team: Team) => {
     PlayerRepository.save(player);
 }
 
+export const leaveTeam = async (player: Player) => {
+    player.team = null;
+    PlayerRepository.save(player);
+}
+
 export const createTeam = async (name: string, captain_id: string) => {
     let team = new Team();
     let captain = await getPlayer(captain_id);
@@ -91,6 +96,7 @@ export const getUsername = async (client: Client, user_id:string) => {
 }
 
 export const captainCheck = async (player: Player) => {
+    if(!player.team) return false;
     const team = await getTeam(player.team.name);
     return player.id == team.captain.id
 }

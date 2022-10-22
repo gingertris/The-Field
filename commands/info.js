@@ -22,9 +22,11 @@ export default {
             .setColor("Fuchsia")
             .setTitle(`Info for ${user.username}`)
             .addFields(
-                {name: "Region", value: `${player.region}`},
-                {name: "Team", value:`${player.team.name}`}
+                {name: "Region", value: `${player.region}`}
             )
+            if(player.team){
+                embed.addFields({name: "Team", value:`${player.team.name}`})
+            }
 
             interaction.reply({embeds:[embed], ephemeral:true})
 

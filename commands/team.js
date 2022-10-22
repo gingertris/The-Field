@@ -19,6 +19,9 @@ export default {
                 team = await getTeam(interaction.options.getString("team"))
             } else{
                 const player = await getPlayer(interaction.user.id)
+                if(!player.team){
+                    interaction.reply({content:"You aren't currently in a team.", ephemeral:true});
+                }
                 team = await getTeam(player.team.name)
             }
             

@@ -19,7 +19,10 @@ export default {
 
         const invites = player.invites.filter(i => !i.answered);
         //const teams = invites.map(async invite => await getTeamByID(invite.team.id))
-        console.log(invites);
+        if(invites.length == 0){
+            interaction.reply({content:"You have no invites.", ephemeral:true})
+            return;
+        }
 
         const embed = new EmbedBuilder()
             .setColor("Fuchsia")
@@ -39,7 +42,7 @@ export default {
             selectMenu.addOptions(
                 {
                     label: invite.team.name,
-                    value: invite.id
+                    value: `${invite.id}`
                 }
             )
         });
@@ -63,18 +66,24 @@ export default {
             return i.user.id === interaction.user.id;
         };
 
-        const response = await message.awaitMessageComponent({ filter, componentType: ComponentType.SelectMenu, time: 60000 });
+        const response = await message.awaitMessageComponent({ filter, componentType: ComponentType.SelectMenu && ComponentType.Button, time: 60000, max:1});
+
+        if(response.customId=="cancel"){
+            await interaction.followUp({content:`Join cancelled.`,ephemeral:true})
+            
+            return
+        }
 
         console.log(response);
-
-        const invite = await getInvite(response.values[0]);
+        
+        const invite = await getInvite(parseInt(response.values[0]));
         const team = await getTeamByID(invite.team.id);
         
         await addPlayerToTeam(player, team);
         await answerInvite(invite);
         
 
-        interaction.followUp({content:`You have joined "${team.name}!`});
+        interaction.followUp({content:`You have joined "${team.name}"!`,ephemeral:true});
 
     }
 }

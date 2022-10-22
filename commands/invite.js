@@ -11,7 +11,13 @@ export default {
                 .setDescription("Player to invite to your team.")
         ),
     async execute(interaction){
-        const captain = await getPlayer(interaction.user.id);
+        let captain;
+        try{
+            captain = await getPlayer(interaction.user.id);
+        } catch(err){
+            interaction.reply({content:`${err.message} Are you registered? Use the `/register` command to register before you can do anything else.`, ephemeral:true})
+            return
+        }
 
         if(!(await captainCheck(captain))){
             interaction.reply({content:"You need to be a team captain to run this command.", ephemeral:true});
