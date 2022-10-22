@@ -6,5 +6,6 @@ export default {
         .setDescription("Test command"),
     async execute(interaction){
         await interaction.reply('Tested!');
+        
     }
 }

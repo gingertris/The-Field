@@ -1,22 +1,15 @@
 import { Client, GatewayIntentBits, Events, Collection } from "discord.js"
 import * as dotenv from 'dotenv'
-import sequelize from './utils/sequelize.js'
-import models from './utils/models.js'
+import AppDataSource from './utils/AppDataSource.ts'
 import commands from './utils/commands.js'
 dotenv.config()
+
 
 const client = new Client({intents:[GatewayIntentBits.Guilds]})
 client.commands = new Collection();
 
 //connect and sync database
-try {
-    await sequelize.authenticate();
-    sequelize.sync();
-    console.log('Connection has been established successfully.');
 
-} catch (error) {
-    console.error('Unable to connect to the database:', error);
-}
 
 //on discord ready
 client.once(Events.ClientReady, () => {
