@@ -126,3 +126,17 @@ export const answerInvite = async (invite: Invite) => {
     invite.answered = true;
     InviteRepository.save(invite);
 }
+
+export const deleteTeam = async (team: Team) => {
+    TeamRepository.remove(team);
+}
+
+export const renameTeam = async (team: Team, name:string) => {
+    team.name = name;
+    TeamRepository.save(team);
+}
+
+export const transferOwnership = async (team: Team, player: Player) => {
+    team.captain = player;
+    TeamRepository.save(team);
+}

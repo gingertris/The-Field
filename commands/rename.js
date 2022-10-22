@@ -1,17 +1,20 @@
 import { SlashCommandBuilder } from "discord.js";
-import { captainCheck, createInvite, getPlayer, getTeam } from "../utils/helpers";
+import { captainCheck, getPlayer, getTeam, renameTeam } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("invite")
-        .setDescription("Invite a player to your team")
-        .addUserOption(option => 
+        .setName("rename")
+        .setDescription("Rename a team")
+        .addStringOption(option => 
             option
-                .setName('target')
-                .setDescription("Player to invite to your team.")
+                .setName("name")
+                .setDescription("Team name")
                 .setRequired(true)
+                .setMaxLength(32)
+                .setMinLength(3)
         ),
     async execute(interaction){
+        
         let captain;
         try{
             captain = await getPlayer(interaction.user.id);
@@ -26,19 +29,17 @@ export default {
         }
 
         const team = await getTeam(captain.team.name);
-        const playerUser = interaction.options.getUser("target");
+
+        const teamname = interaction.options.getString("name");
 
         try{
-            const player = await getPlayer(playerUser.id);
-            await createInvite(player, team);
-            interaction.reply({content:`Invite sent. ${playerUser.username} can join ${team.name} by using the \`/join\` command.`, ephemeral:true});
-            return
-        } catch (err) {
-            interaction.reply({content:`${err.message} Are they registered?`, ephemeral:true});
+            await renameTeam(team, teamname);
+        } catch (err){
+            interaction.reply({content:err.message, ephemeral:true});
             return
         }
-
-
         
+        interaction.reply({content:`Team has been renamed to "${teamname}".`, ephemeral:true});
+
     }
 }

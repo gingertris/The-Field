@@ -10,7 +10,7 @@ export default {
         try{
             player = await getPlayer(interaction.user.id);
         } catch(err){
-            interaction.reply({content:`${err.message} Are you registered? Use the `/register` command to register before you can do anything else.`, ephemeral:true})
+            interaction.reply({content:`${err.message} Are you registered? Use the \`/register\` command to register before you can do anything else.`, ephemeral:true})
             return
         }
         player.invites.forEach(async invite => {

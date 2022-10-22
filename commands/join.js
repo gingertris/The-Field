@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ActionRowBuilder, SelectMenuBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle , ComponentType } from "discord.js";
+import { SlashCommandBuilder, ActionRowBuilder, SelectMenuBuilder, EmbedBuilder , ComponentType } from "discord.js";
 import { addPlayerToTeam, answerInvite, getInvite, getPlayer, getTeam, getTeamByID } from "../utils/helpers";
 
 export default {
@@ -13,8 +13,8 @@ export default {
                 throw new Error("You are already in a team. Please `/leave` your current team to join a new one.")
             }
         } catch(err){
-            interaction.reply({content:err.message, ephemeral:true})
-            return;
+            interaction.reply({content:`${err.message} Are you registered? Use the \`/register\` command to register before you can do anything else.`, ephemeral:true})
+            return
         }
 
         const invites = player.invites.filter(i => !i.answered);

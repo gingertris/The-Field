@@ -84,6 +84,12 @@ Transfers ownership of team to @User. If not Captain of a team, this command fai
 
 You need to be the Captain of your team to use this command.
 
+`/delete`
+
+Delete team.
+
+You must be the captain of a team to delete it.
+
 `/rename “New Team Name”`
 	
 Renames team to a new team name. 

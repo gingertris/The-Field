@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne , DeleteDateColumn} from "typeorm"
 import { Player } from "./player"
 
 import { Division, Region } from "../utils/enums"
@@ -28,10 +28,10 @@ export class Team {
     @Column({default:1000})
     rating: number
 
-    @OneToMany(() => Player, (player) => player.team)
+    @OneToMany(() => Player, (player) => player.team, {onDelete:"SET NULL"})
     players: Player[]
 
-    @OneToOne(() => Player, (player) => player.team, {eager:true})
+    @OneToOne(() => Player, (player) => player.team, {eager:true, onDelete:"SET NULL"})
     captain: Player
 
     @OneToMany(() => Invite, (invite) => invite.team)

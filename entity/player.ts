@@ -15,7 +15,7 @@ export class Player{
     })
     region: Region
 
-    @ManyToOne(() => Team, (team) => team.players)
+    @ManyToOne(() => Team, (team) => team.players, {onDelete:"SET NULL"})
     team: Team | null
 
     @OneToMany(() => Invite, (invite) => invite.player)

@@ -7,7 +7,7 @@ export class Invite{
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Team, (team) => team.invites, {eager:true})
+    @ManyToOne(() => Team, (team) => team.invites, {eager:true, onDelete:"SET NULL"})
     team: Team
 
     @ManyToOne(() => Player, (player) => player.invites)

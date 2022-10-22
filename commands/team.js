@@ -19,14 +19,14 @@ export default {
                 team = await getTeam(interaction.options.getString("team"))
             } else{
                 const player = await getPlayer(interaction.user.id)
+                console.log(player)
                 if(!player.team){
                     interaction.reply({content:"You aren't currently in a team.", ephemeral:true});
+                    return;
                 }
                 team = await getTeam(player.team.name)
             }
             
-            console.log(team)
-
             let usernames = [];
             team.players.forEach(async p => usernames.push(await getUsername(interaction.client, p.id)));
 

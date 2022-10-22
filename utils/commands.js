@@ -1,22 +1,29 @@
-import test from '../commands/test.js'
-import create from '../commands/create.js'
-import register from '../commands/register.js'
-import info from '../commands/info.js'
-import team from '../commands/team.js'
-import invite from '../commands/invite.js'
-import join from '../commands/join.js'
-import leave from '../commands/leave.js'
-import clear from '../commands/clear.js'
+import Test from '../commands/test.js'
+import Create from '../commands/create.js'
+import Register from '../commands/register.js'
+import Info from '../commands/info.js'
+import Team from '../commands/team.js'
+import Invite from '../commands/invite.js'
+import Join from '../commands/join.js'
+import Leave from '../commands/leave.js'
+import Clear from '../commands/clear.js'
+import Delete from '../commands/delete.js'
+import Rename from '../commands/rename.js'
+import Transfer from '../commands/transfer.js'
+
 const Commands = [
-    test,
-    create,
-    register,
-    info,
-    team,
-    invite,
-    join,
-    leave,
-    clear
+    Test,
+    Create,
+    Register,
+    Info,
+    Team,
+    Invite,
+    Join,
+    Leave,
+    Clear,
+    Delete,
+    Rename,
+    Transfer
 ]
 
 export default Commands
