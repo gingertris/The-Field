@@ -9,6 +9,7 @@ export default {
             option
                 .setName('target')
                 .setDescription("Player to invite to your team.")
+                .setRequired(true)
         ),
     async execute(interaction){
         let captain;

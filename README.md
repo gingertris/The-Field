@@ -48,6 +48,10 @@ If there is an odd number of people in the queue at the top of the hour, the las
 
 # Commands
 
+`/register EU|NA`
+
+Register to use this service.
+
 `/create “Team Name”`
 
 Creates a team, sets person who ran command as Captain
@@ -63,6 +67,10 @@ You need to be the Captain of your team to use this command.
 Lists invites. Button for each invite, press button to join team.
 
 Command will fail if you are already in a team.
+
+`/clear`
+
+Clears all invites.
 
 `/leave`
 
