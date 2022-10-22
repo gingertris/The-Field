@@ -17,11 +17,17 @@ export default {
         ),
     async execute(interaction){
 
-        let player = await getPlayer(interaction.user.id);
-        if(player){
-            interaction.reply({content:"You are already registered. If you want to change region, please contact an administrator.", ephemeral:true})
-            return
+        try{
+            let player = await getPlayer(interaction.user.id);
+
+            if(player){
+                interaction.reply({content:"You are already registered. If you want to change region, please contact an administrator.", ephemeral:true})
+                return
+            }
+        } catch (err) {
+            //player doesnt exist. thats expected, continue
         }
+
 
 
         const id = interaction.user.id;
@@ -35,16 +41,11 @@ export default {
             return;
         }
         
-
         try{
-            player = await getPlayer(interaction.user.id);
+            await getPlayer(interaction.user.id); //check if exists
         } catch (err) {
             interaction.reply({content:err.message, ephemeral:true});
-        }
-
-        if(!player){
-            interaction.reply({content:"Something went wrong. You are not registered.", ephemeral:true});
-            return
+            return;
         }
 
         interaction.reply({content:"You have successfully registered. Enjoy!", ephemeral:true});

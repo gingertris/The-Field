@@ -2,14 +2,13 @@ import { Client, GatewayIntentBits, Events, Collection } from "discord.js"
 import * as dotenv from 'dotenv'
 import AppDataSource from './utils/AppDataSource.ts'
 import commands from './utils/commands.js'
+import interactions from './utils/interactions.js' //custom interactions
 dotenv.config()
 
 
-const client = new Client({intents:[GatewayIntentBits.Guilds]})
+const client = new Client({intents:[GatewayIntentBits.Guilds]});
+
 client.commands = new Collection();
-
-//connect and sync database
-
 
 //on discord ready
 client.once(Events.ClientReady, () => {
@@ -26,7 +25,8 @@ for (const command of commands) {
 	}
 }
 
-//handle interaction (shamelessly stolen from discord.js tutorial)
+
+//handle command interaction (shamelessly stolen from discord.js tutorial)
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 

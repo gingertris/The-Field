@@ -22,6 +22,11 @@ export default {
             return
         }
 
+        if(player.team) {
+            interaction.reply({content:"You are already in a team. Please leave your current team if you want to make a new team.", ephemeral:true})
+            return
+        }
+
         const teamname = interaction.options.getString("name");
 
         try{

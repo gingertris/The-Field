@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne 
 import { Player } from "./player"
 
 import { Division, Region } from "../utils/enums"
+import { Invite } from "./invite"
 
 @Entity()
 export class Team {
@@ -30,7 +31,10 @@ export class Team {
     @OneToMany(() => Player, (player) => player.team)
     players: Player[]
 
-    @OneToOne(() => Player, (player) => player.team)
+    @OneToOne(() => Player, (player) => player.team, {eager:true})
     captain: Player
+
+    @OneToMany(() => Invite, (invite) => invite.team)
+    invites: Invite[]
 
 }

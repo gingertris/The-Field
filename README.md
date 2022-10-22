@@ -95,9 +95,13 @@ Report match score.
 *How? Gives user a message with a Win button and a Loss button. 
 When one team reports, bot can message the captain of the other team asking to confirm the score, with its own interaction.*
 
-`/info`
+`/info @User`
 
-Gives you your information. This includes your region, current team, team stats, etc.
+Gives you player information. If `@User` is omitted, it gives you your own information. Currently only region and team.
+
+`/team "Team name"`
+
+Gives you information on a team. If `"Team name"` is omitted, it gives you information on your own team. Captain, team members, region, division and rating.
 
 
 <ins>Ideas

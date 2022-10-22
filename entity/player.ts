@@ -1,7 +1,8 @@
-import { Entity, PrimaryColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryColumn, Column, ManyToOne, OneToMany } from "typeorm"
 import { Team } from "./team"
 
 import { Region } from "../utils/enums"
+import { Invite } from "./invite"
 
 @Entity()
 export class Player{
@@ -14,6 +15,9 @@ export class Player{
     })
     region:Region
 
-    @ManyToOne(() => Team, (team) => team.players, {eager:true})
+    @ManyToOne(() => Team, (team) => team.players)
     team: Team
+
+    @OneToMany(() => Invite, (invite) => invite.player)
+    invites: Invite[]
 }
