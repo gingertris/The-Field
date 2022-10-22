@@ -1,10 +1,7 @@
 import { Entity, PrimaryColumn, Column, ManyToOne } from "typeorm"
 import { Team } from "./team"
 
-export enum Region {
-    EU = "EU",
-    NA = "NA"
-}
+import { Region } from "../utils/enums"
 
 @Entity()
 export class Player{
@@ -17,6 +14,6 @@ export class Player{
     })
     region:Region
 
-    @ManyToOne(() => Team, (team) => team.players)
+    @ManyToOne(() => Team, (team) => team.players, {eager:true})
     team: Team
 }

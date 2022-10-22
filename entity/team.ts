@@ -1,10 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne } from "typeorm"
 import { Player } from "./player"
 
-export enum Division {
-    OPEN = "Open",
-    CLOSED = "Closed",
-}
+import { Division, Region } from "../utils/enums"
 
 @Entity()
 export class Team {
@@ -20,6 +17,12 @@ export class Team {
         default:Division.OPEN
     })
     division:Division
+
+    @Column({
+        type:"enum",
+        enum: Region
+    })
+    region: Region
 
     @Column({default:1000})
     rating: number

@@ -31,7 +31,9 @@ The following times assume these timezones:
 
 <ins>Power Hours
 
-Saturdays + Sundays @ 7 PM, 8 PM, 9 PM
+**Sat - Sun** 
+
+19:00 - 21:00
 
 Power Hour Ladder Point Multiplier (for wins): 1.5x
 
@@ -92,6 +94,11 @@ Report match score.
 
 *How? Gives user a message with a Win button and a Loss button. 
 When one team reports, bot can message the captain of the other team asking to confirm the score, with its own interaction.*
+
+`/info`
+
+Gives you your information. This includes your region, current team, team stats, etc.
+
 
 <ins>Ideas
 

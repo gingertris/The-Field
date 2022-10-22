@@ -27,9 +27,20 @@ export default {
         const id = interaction.user.id;
         const region = interaction.options.getString("region");
         console.log(`${id}: ${region}`)
-        await registerPlayer(id, region);
 
-        player = await getPlayer(interaction.user.id);
+        try{
+            await registerPlayer(id, region);
+        } catch (err){
+            interaction.reply({content:err.message, ephemeral:true});
+            return;
+        }
+        
+
+        try{
+            player = await getPlayer(interaction.user.id);
+        } catch (err) {
+            interaction.reply({content:err.message, ephemeral:true});
+        }
 
         if(!player){
             interaction.reply({content:"Something went wrong. You are not registered.", ephemeral:true});

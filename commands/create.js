@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Team } from "../entity/team";
-import { getPlayer } from "../utils/helpers";
+import { createTeam, getPlayer } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -22,9 +22,16 @@ export default {
             return
         }
 
-        //await interaction.reply('Creating team...');
-        //const team = new Team()
-        //team.name = interaction.options.getString("name")
+        const teamname = interaction.options.getString("name");
+
+        try{
+            await createTeam(teamname, interaction.user.id);
+        } catch (err){
+            interaction.reply({content:err.message, ephemeral:true});
+            return
+        }
+        
+        interaction.reply({content:`Team "${teamname}" has been created.`, ephemeral:true});
 
     }
 }
