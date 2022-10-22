@@ -1,9 +1,10 @@
-import Test from '../commands/test.js'
-import Create from '../commands/create.js'
-
+import test from '../commands/test.js'
+import create from '../commands/create.js'
+import register from '../commands/register.js'
 const Commands = [
-    Test,
-    Create
+    test,
+    create,
+    register
 ]
 
 export default Commands

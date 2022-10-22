@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { Team } from "../entity/team";
 import { getPlayer } from "../utils/helpers";
 
@@ -19,6 +19,7 @@ export default {
         const player = await getPlayer(interaction.user.id);
         if(!player){
             interaction.reply({content:"Player not found. Are you registered? Use the `/register` command to register before you can do anything else.", ephemeral:true})
+            return
         }
 
         //await interaction.reply('Creating team...');

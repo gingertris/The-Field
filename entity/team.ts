@@ -11,16 +11,17 @@ export class Team {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ unique:true })
+    @Column({ unique:true})
     name: string
 
     @Column({
         type:"enum",
-        enum: Division
+        enum: Division,
+        default:Division.OPEN
     })
     division:Division
 
-    @Column()
+    @Column({default:1000})
     rating: number
 
     @OneToMany(() => Player, (player) => player.team)
