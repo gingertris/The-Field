@@ -58,7 +58,7 @@ Creates a team, sets person who ran command as Captain
 
 `/invite @User`
 	
-Invites @User to your team.
+Invites @User to your team. You can only invite players of the same region as you to your team.
 
 You need to be the Captain of your team to use this command.
 

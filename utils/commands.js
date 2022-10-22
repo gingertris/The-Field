@@ -10,6 +10,7 @@ import Clear from '../commands/clear.js'
 import Delete from '../commands/delete.js'
 import Rename from '../commands/rename.js'
 import Transfer from '../commands/transfer.js'
+import Kick from '../commands/kick.js'
 
 const Commands = [
     Test,
@@ -23,7 +24,8 @@ const Commands = [
     Clear,
     Delete,
     Rename,
-    Transfer
+    Transfer,
+    Kick
 ]
 
 export default Commands
