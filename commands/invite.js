@@ -30,6 +30,12 @@ export default {
 
         try{
             const player = await getPlayer(playerUser.id);
+
+            if(player.region != captain.region) {
+                interaction.reply({content:"You can only invite people who are in the same region as you.", ephemeral:true});
+                return;
+            }
+
             await createInvite(player, team);
             interaction.reply({content:`Invite sent. ${playerUser.username} can join ${team.name} by using the \`/join\` command.`, ephemeral:true});
             return
