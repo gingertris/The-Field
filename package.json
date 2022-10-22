@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec ts-node app.js",
-    "deploy": "node deploy-commands"
+    "deploy": "ts-node deploy-commands"
   },
   "author": "Tris",
   "license": "ISC",

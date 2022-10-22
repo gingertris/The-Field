@@ -48,7 +48,7 @@ If there is an odd number of people in the queue at the top of the hour, the las
 
 `/create “Team Name”`
 
-Creates a team name, sets person who ran command as Captain
+Creates a team, sets person who ran command as Captain
 
 `/invite @User`
 	
