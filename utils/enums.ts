@@ -7,3 +7,8 @@ export enum Division {
     OPEN = "Open",
     CLOSED = "Closed",
 }
+
+export enum Teams {
+    Team1,
+    Team2
+}
