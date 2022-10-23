@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv'
 import AppDataSource from './utils/AppDataSource.ts'
 import commands from './utils/commands.js'
 import interactions from './utils/interactions.js' //custom interactions
+import { handleJoinQueue } from "./utils/queue"
 dotenv.config()
 
 
@@ -28,6 +29,20 @@ for (const command of commands) {
 
 //handle command interaction (shamelessly stolen from discord.js tutorial)
 client.on(Events.InteractionCreate, async interaction => {
+
+	//handle queue buttons
+	if (interaction.isButton()) {
+		try{
+			if (interaction.customId == 'joinqueue') return await handleJoinQueue(interaction);
+			if (interaction.customId == 'leavequeue') return await handleLeaveQueue(interaction);
+		} catch (err) {
+			console.error(err);
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			return
+		}
+	}
+
+
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
@@ -44,5 +59,6 @@ client.on(Events.InteractionCreate, async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
+
 
 client.login(process.env.BOT_TOKEN);
