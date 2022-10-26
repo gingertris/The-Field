@@ -16,6 +16,10 @@ export const handleJoinQueue = async (interaction: ButtonInteraction) => {
             interaction.reply({content:"You aren't in a team.", ephemeral:true});
             return
         }
+        if(player.team.players.length < 3){
+            interaction.reply({content:"Your team needs to have at least 3 members to be able to queue.", ephemeral:true});
+            return
+        }
         
     } catch(err:any){
         interaction.reply({content:`${err.message} Are you registered? Use the \`/register\` command to register before you can do anything else.`, ephemeral:true})
