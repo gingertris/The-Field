@@ -10,6 +10,11 @@ export class Player{
     id: string
 
     @Column({
+        unique:true
+    })
+    username:string
+
+    @Column({
         type:"enum",
         enum: Region
     })
@@ -18,6 +23,6 @@ export class Player{
     @ManyToOne(() => Team, (team) => team.players, {onDelete:"SET NULL"})
     team: Team | null
 
-    @OneToMany(() => Invite, (invite) => invite.player)
+    @OneToMany(() => Invite, (invite) => invite.player, {onDelete:"CASCADE"})
     invites: Invite[]
 }

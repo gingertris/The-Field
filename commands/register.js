@@ -7,6 +7,13 @@ export default {
         .setDescription("Register for Tris' Field")
         .addStringOption(option => 
             option
+                .setName("username")
+                .setDescription("Set your username")
+                .setRequired(true)
+
+        )
+        .addStringOption(option => 
+            option
                 .setName("region")
                 .setDescription("Region")
                 .setRequired(true)
@@ -32,10 +39,11 @@ export default {
 
         const id = interaction.user.id;
         const region = interaction.options.getString("region");
+        const username = interaction.options.getString("username");
         console.log(`${id}: ${region}`)
 
         try{
-            await registerPlayer(id, region);
+            await registerPlayer(id, username, region);
         } catch (err){
             interaction.reply({content:err.message, ephemeral:true});
             return;
@@ -50,6 +58,7 @@ export default {
 
 
         await syncRoles(interaction.member)
+        interaction.member.setNickname(username);
         interaction.reply({content:"You have successfully registered. Enjoy!", ephemeral:true});
 
     }

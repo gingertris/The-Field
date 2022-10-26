@@ -28,24 +28,33 @@ export const getPlayer = async (id: string) => {
     throw new Error("Player not found.")
 }
 
-export const registerPlayer = async (id: string, region: string) => {
+export const registerPlayer = async (id: string,username:string, region: string) => {
     const player = new Player();
     player.id = id;
     player.region = region as Region;
+    player.username = username;
     console.log(player.region)
     await PlayerRepository.save(player).catch(err => {
-        throw err;
+        if(err.code == "23505"){
+            throw new Error(`Username "${username}" is already taken. Please try a different username.`);
+        } else{
+            throw err;
+        }
     });
 }
 
 export const addPlayerToTeam = async (player: Player, team: Team) => {
     player.team = team;
-    PlayerRepository.save(player);
+    await PlayerRepository.save(player).catch(err => {
+        throw err;
+    });
 }
 
 export const leaveTeam = async (player: Player) => {
     player.team = null;
-    PlayerRepository.save(player);
+    await PlayerRepository.save(player).catch(err => {
+        throw err;
+    });
 }
 
 export const createTeam = async (name: string, player: Player) => {
@@ -72,7 +81,9 @@ export const getTeam = async (name: string) => {
         relations: {
             players:true
         }
-    })
+    }).catch(err => {
+        throw err;
+    });
     if(team) return team;
     throw new Error("Team not found.")
 }
@@ -108,7 +119,9 @@ export const createInvite = async (player: Player, team: Team) => {
     const invite = new Invite();
     invite.player = player;
     invite.team = team;
-    InviteRepository.save(invite);
+    await InviteRepository.save(invite).catch(err => {
+        throw err;
+    });;
 }
 
 export const getInvite = async (id: number) => {
@@ -127,21 +140,29 @@ export const getInvite = async (id: number) => {
 
 export const answerInvite = async (invite: Invite) => {
     invite.answered = true;
-    InviteRepository.save(invite);
+    await InviteRepository.save(invite).catch(err => {
+        throw err;
+    });
 }
 
 export const deleteTeam = async (team: Team) => {
-    TeamRepository.remove(team);
+    await TeamRepository.remove(team).catch(err => {
+        throw err;
+    });
 }
 
 export const renameTeam = async (team: Team, name:string) => {
     team.name = name;
-    TeamRepository.save(team);
+    await TeamRepository.save(team).catch(err => {
+        throw err;
+    });
 }
 
 export const transferOwnership = async (team:Team, player:Player) => {
     team.captain_id = player.id;
-    TeamRepository.save(team);
+    await TeamRepository.save(team).catch(err => {
+        throw err;
+    });
 }
 
 export const syncRoles = async (member:GuildMember) => {
