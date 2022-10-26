@@ -40,7 +40,7 @@ Power Hour Ladder Point Multiplier (for wins): 1.5x
 # Matchmaking
 
 
-Queues will pop at the top of each hour. 21:00 is when the last queue will pop. Queueing outside of the opening times will not be possible.
+Queues will pop at the top of each hour. 22:00 is when the last queue will pop. Queueing outside of the opening times will not be possible.
 
 All queued teams will be sorted in order of Rating. Teams will be matched against teams of a similar rating in order to create fair, balanced and (hopefully) enjoyable matches.
 
