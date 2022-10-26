@@ -3,6 +3,7 @@ import { Player } from "./player"
 
 import { Division, Region } from "../utils/enums"
 import { Invite } from "./invite"
+import { Queue } from "./queue"
 
 @Entity()
 export class Team {
@@ -36,5 +37,8 @@ export class Team {
 
     @OneToMany(() => Invite, (invite) => invite.team)
     invites: Invite[]
+
+    @OneToMany(() => Queue, (queue) => queue.team, {cascade:true})
+    queue:Queue
 
 }

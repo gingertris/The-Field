@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv'
 import AppDataSource from './utils/AppDataSource.ts'
 import commands from './utils/commands.js'
 import interactions from './utils/interactions.js' //custom interactions
-import { handleJoinQueue } from "./utils/queue"
+import { handleJoinQueue, handleLeaveQueue } from "./utils/queue"
 dotenv.config()
 
 
@@ -22,7 +22,7 @@ for (const command of commands) {
 	if ('data' in command && 'execute' in command) {
 		client.commands.set(command.data.name, command);
 	} else {
-		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		console.log(`[WARNING] A command is missing a required "data" or "execute" property.`);
 	}
 }
 

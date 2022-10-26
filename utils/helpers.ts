@@ -1,5 +1,5 @@
 import { Player } from "../entity/player"
-import { Region } from "./enums";
+import { Division, Region } from "./enums";
 import { Team } from "../entity/team";
 import AppDataSource from "./AppDataSource";
 import {Client} from "discord.js"
