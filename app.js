@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv'
 import AppDataSource from './utils/AppDataSource.ts'
 import commands from './utils/commands.js'
 import interactions from './utils/interactions.js' //custom interactions
+import { Jobs } from "./utils/matchmaking"
 import { handleJoinQueue, handleLeaveQueue } from "./utils/queue"
 dotenv.config()
 
@@ -14,6 +15,10 @@ client.commands = new Collection();
 //on discord ready
 client.once(Events.ClientReady, () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+	//load jobs
+	Jobs.forEach(job=>{
+		job(client);
+	})
 });
 
 //load commands (shamelessly stolen from discord.js tutorial)

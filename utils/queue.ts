@@ -69,18 +69,20 @@ export const handleLeaveQueue =  async (interaction: ButtonInteraction) => {
     interaction.reply({content:"You have left the queue.", ephemeral:true})
 }
 
-const getFullQueue = async (region:Region, division:Division) => {
-    const queue = QueueRepository.find({
-        where:{
-            region:region,
-            division:division
-        }
-    })
+export const getFullQueue = async () => {
+    const queue = await QueueRepository.find()
     if(!queue) throw new Error("No queue found.");
+    return queue;
+}
+
+export const emptyQueue = async () => {
+    const queue = await getFullQueue();
+    if(!queue) return;
+    QueueRepository.remove(queue);
 }
 
 const getQueue = async (id:number) => {
-    const queue = QueueRepository.findOne({
+    const queue = await QueueRepository.findOne({
         where:{
             id:id
         }

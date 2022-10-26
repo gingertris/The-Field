@@ -1,6 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
 import { Team } from "./team";
-import { Teams }  from "../utils/enums";
 @Entity()
 export class Match{
 
@@ -15,16 +14,11 @@ export class Match{
     @JoinColumn()
     team2: Team
 
-    @Column(
-        {
-            type: "enum",
-            enum: Teams
-        }
-    )
-    winner: Teams
+    @Column()
+    winner_id: number
 
     @Column()
-    powerHour:boolean
+    powerHour: boolean
     
     @CreateDateColumn()
     date: Date
