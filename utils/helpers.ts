@@ -2,7 +2,7 @@ import { Player } from "../entity/player"
 import { Division, Region } from "./enums";
 import { Team } from "../entity/team";
 import AppDataSource from "./AppDataSource";
-import {Client} from "discord.js"
+import {BaseInteraction, Client, CommandInteraction, GuildMember, User} from "discord.js"
 import { Invite } from "../entity/invite";
 
 import * as dotenv from 'dotenv'
@@ -90,10 +90,10 @@ export const getTeamByID = async (id:number) => {
     throw new Error("Team not found.")
 }
 
-export const getUsername = async (client: Client, user_id:string) => {
-    if(!guildId){throw new Error("No guildId")}
-    const guild = await client.guilds.fetch(guildId);
-    const member = await guild.members.fetch(user_id);
+export const getUsername = async (interaction: BaseInteraction, user_id:string) => {
+    if(!interaction.guild){throw new Error("No guild in interaction")}
+
+    const member = await interaction.guild.members.fetch(user_id);
     return member.user.username;
 }
 
@@ -143,3 +143,39 @@ export const transferOwnership = async (team:Team, player:Player) => {
     team.captain_id = player.id;
     TeamRepository.save(team);
 }
+
+export const syncRoles = async (member:GuildMember) => {
+    const player = await getPlayer(member.user.id);
+    if(!(process.env.ROLE_EU_ID && process.env.ROLE_NA_ID && process.env.ROLE_OPEN_ID && process.env.ROLE_CLOSED_ID)) throw new Error("Role IDs not in environment") //check all roles loaded in
+    
+    const roles = {
+        EU:process.env.ROLE_EU_ID,
+        NA:process.env.ROLE_NA_ID,
+        open:process.env.ROLE_OPEN_ID,
+        closed:process.env.ROLE_CLOSED_ID
+    }
+
+    switch (player.region){
+        case Region.EU:
+            member.roles.add(roles.EU);
+            member.roles.remove(roles.NA);
+            break;
+        case Region.NA:
+            member.roles.add(roles.NA);
+            member.roles.remove(roles.EU);
+            break
+    }
+
+    if(player.team){
+        switch(player.team.division){
+            case Division.CLOSED:
+                member.roles.add(roles.closed)
+                member.roles.remove(roles.open);
+                break;
+            case Division.OPEN:
+                member.roles.add(roles.open);
+                member.roles.remove(roles.closed);
+                break;
+        }
+    }
+} 

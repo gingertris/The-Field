@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ActionRowBuilder, SelectMenuBuilder, EmbedBuilder , ComponentType } from "discord.js";
-import { addPlayerToTeam, answerInvite, getInvite, getPlayer, getTeam, getTeamByID } from "../utils/helpers";
+import { addPlayerToTeam, answerInvite, getInvite, getPlayer, getTeam, getTeamByID, syncRoles } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -61,6 +61,7 @@ export default {
             const team = await getTeamByID(invite.team.id);
             
             await addPlayerToTeam(player, team);
+            await syncRoles(interaction.member);
             await answerInvite(invite);
             
 

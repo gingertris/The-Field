@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { captainCheck, createInvite, getPlayer, getTeam, leaveTeam } from "../utils/helpers";
+import { captainCheck, createInvite, getPlayer, getTeam, leaveTeam, syncRoles } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -25,8 +25,13 @@ export default {
             return;
         }
 
-        const team = await getTeam(captain.team.name);
         const playerUser = interaction.options.getUser("target");
+
+        const guildId = process.env.GUILD_ID;
+        if(!guildId) throw new Error("Guild ID not in environment")
+
+        const guild = await interaction.client.guilds.fetch(guildId);
+        const member = await guild.members.fetch(playerUser.id);
 
         try{
             const player = await getPlayer(playerUser.id);
@@ -37,6 +42,7 @@ export default {
             }
 
             await leaveTeam(player);
+            await syncRoles(member);
             interaction.reply({content:`${playerUser.username} has been kicked from the team.`, ephemeral:true});
             return
         } catch (err) {

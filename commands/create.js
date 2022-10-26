@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Team } from "../entity/team";
-import { createTeam, getPlayer } from "../utils/helpers";
+import { createTeam, getPlayer, syncRoles } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -39,6 +39,7 @@ export default {
             return
         }
         
+        await syncRoles(interaction.member);
         interaction.reply({content:`Team "${teamname}" has been created.`, ephemeral:true});
 
     }

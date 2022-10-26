@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { getPlayer, registerPlayer } from "../utils/helpers";
+import { getPlayer, registerPlayer, syncRoles } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -48,6 +48,8 @@ export default {
             return;
         }
 
+
+        await syncRoles(interaction.member)
         interaction.reply({content:"You have successfully registered. Enjoy!", ephemeral:true});
 
     }

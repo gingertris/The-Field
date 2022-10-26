@@ -1,5 +1,5 @@
 import { SlashCommandBuilder,  ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } from "discord.js";
-import { captainCheck, deleteTeam, getPlayer, getTeam } from "../utils/helpers";
+import { captainCheck, deleteTeam, getPlayer, getTeam, syncRoles } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -19,8 +19,6 @@ export default {
             interaction.reply({content:"You need to be a team captain to run this command.", ephemeral:true});
             return;
         }
-
-        const team = await getTeam(captain.team.name);
 
         const deleteButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Danger)
@@ -50,6 +48,7 @@ export default {
 
             if(answer=="delete"){
                 await deleteTeam(captain.team)
+                await syncRoles(interaction.member);
                 interaction.followUp({content:`Team has been deleted.`,ephemeral:true});
             } else{
                 interaction.followUp({content:`Team has not been deleted.`,ephemeral:true});

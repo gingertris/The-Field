@@ -27,14 +27,29 @@ export default {
                 team = await getTeam(player.team.name)
             }
             
+
+            console.log(team.players);
+
             let usernames = [];
-            team.players.forEach(async p => usernames.push(await getUsername(interaction.client, p.id)));
+
+            for(let p in team.players){
+                console.log(p);
+
+                const member = await interaction.guild.members.fetch(p.id);
+                usernames = [...usernames, member.user.username];    
+
+                //let username = await getUsername(interaction.client, p.id);
+                //usernames.push(username);
+            }
+      
+            
+            console.log(usernames)
 
             const embed = new EmbedBuilder()
             .setColor("Fuchsia")
             .setTitle(`Info for ${team.name}`)
             .addFields(
-                {name: "Captain", value: `${await getUsername(interaction.client, team.captain_id)}`},
+                {name: "Captain", value: `${await getUsername(interaction, team.captain_id)}`},
                 {name: "Members", value: `${usernames.join("\n")}`},
                 {name: "Region", value: `${team.region}`},
                 {name: "Division", value: `${team.division}`},

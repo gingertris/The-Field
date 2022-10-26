@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { captainCheck, deleteTeam, getPlayer, getTeamByID, leaveTeam } from "../utils/helpers";
+import { captainCheck, deleteTeam, getPlayer, getTeamByID, leaveTeam, syncRoles } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -38,6 +38,7 @@ export default {
             
         }
 
+        await syncRoles(interaction.member)
         interaction.reply({content:message, ephemeral:true});
 
 
