@@ -5,6 +5,11 @@ import AppDataSource from "./AppDataSource";
 import {Client} from "discord.js"
 import { Invite } from "../entity/invite";
 
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const guildId = process.env.GUILD_ID;
+
 const PlayerRepository = AppDataSource.getRepository(Player);
 const TeamRepository = AppDataSource.getRepository(Team);
 const InviteRepository = AppDataSource.getRepository(Invite);
@@ -86,7 +91,8 @@ export const getTeamByID = async (id:number) => {
 }
 
 export const getUsername = async (client: Client, user_id:string) => {
-    const guild = await client.guilds.fetch("1031537914422767697");
+    if(!guildId){throw new Error("No guildId")}
+    const guild = await client.guilds.fetch(guildId);
     const member = await guild.members.fetch(user_id);
     return member.user.username;
 }
