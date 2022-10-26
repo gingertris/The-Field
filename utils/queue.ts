@@ -23,15 +23,14 @@ export const handleJoinQueue = async (interaction: ButtonInteraction) => {
     }
 
     if(await isTeamQueued(player.team.id)){
-        console.log(1)
         interaction.reply({content:`You are already in the queue!`, ephemeral:true})
         return
     }
 
     try{
-        console.log(2)
+
         await joinQueue(player.team);
-        console.log(3)
+
     } catch(err:any){
         interaction.reply({content:`${err.message}.`, ephemeral:true})
         return
