@@ -10,6 +10,8 @@ export default {
                 .setName("username")
                 .setDescription("Set your username")
                 .setRequired(true)
+                .setMaxLength(32)
+                .setMinLength(1)
 
         )
         .addStringOption(option => 
@@ -58,7 +60,11 @@ export default {
 
 
         await syncRoles(interaction.member)
-        interaction.member.setNickname(username);
+        try{
+            interaction.member.setNickname(username);
+        } catch(err){
+            console.log("unable to change nickname")
+        }
         interaction.reply({content:"You have successfully registered. Enjoy!", ephemeral:true});
 
     }

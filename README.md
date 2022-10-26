@@ -48,9 +48,9 @@ If there is an odd number of people in the queue at the top of the hour, the las
 
 # Commands
 
-`/register EU|NA`
+`/register <username> EU|NA`
 
-Register to use this service.
+Register to use this service. Username must be unique.
 
 `/create “Team Name”`
 

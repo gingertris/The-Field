@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
-import { getPlayer, getTeam, getUsername } from "../utils/helpers";
+import { getPlayer, getTeam } from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()
@@ -27,29 +27,14 @@ export default {
                 team = await getTeam(player.team.name)
             }
             
-
-            console.log(team.players);
-
-            let usernames = [];
-
-            for(let p in team.players){
-                console.log(p);
-
-                const member = await interaction.guild.members.fetch(p.id);
-                usernames = [...usernames, member.user.username];    
-
-                //let username = await getUsername(interaction.client, p.id);
-                //usernames.push(username);
-            }
-      
-            
-            console.log(usernames)
+            let usernames = team.players.map(p => p.username);
+            let captain = await getPlayer(team.captain_id);
 
             const embed = new EmbedBuilder()
             .setColor("Fuchsia")
             .setTitle(`Info for ${team.name}`)
             .addFields(
-                {name: "Captain", value: `${await getUsername(interaction, team.captain_id)}`},
+                {name: "Captain", value: `${captain.username}`},
                 {name: "Members", value: `${usernames.join("\n")}`},
                 {name: "Region", value: `${team.region}`},
                 {name: "Division", value: `${team.division}`},
