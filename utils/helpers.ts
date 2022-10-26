@@ -24,10 +24,9 @@ export const getPlayer = async (id: string) => {
 }
 
 export const registerPlayer = async (id: string, region: string) => {
-    let player = new Player();
+    const player = new Player();
     player.id = id;
     player.region = region as Region;
-    player.captain = false;
     console.log(player.region)
     await PlayerRepository.save(player).catch(err => {
         throw err;
@@ -41,14 +40,14 @@ export const addPlayerToTeam = async (player: Player, team: Team) => {
 
 export const leaveTeam = async (player: Player) => {
     player.team = null;
-    player.captain = false;
     PlayerRepository.save(player);
 }
 
 export const createTeam = async (name: string, player: Player) => {
-    let team = new Team();
+    const team = new Team();
     team.name = name;
     team.region = player.region;
+    team.captain_id = player.id;
     await TeamRepository.save(team).catch(err => {
         if(err.code == "23505"){
             throw new Error(`Team name "${name}" is already taken. Please try a different team name.`);
@@ -58,8 +57,6 @@ export const createTeam = async (name: string, player: Player) => {
         
     });
     await addPlayerToTeam(player, team);
-    player.captain = true
-    PlayerRepository.save(player);
 }
 
 export const getTeam = async (name: string) => {
@@ -95,11 +92,14 @@ export const getUsername = async (client: Client, user_id:string) => {
 }
 
 export const captainCheck = async (player: Player) => {
-    return player.captain;
+    if(!player.team) throw new Error(`Player is not on a team.`)
+    const team = await getTeamByID(player.team.id);
+
+    return player.id == team.captain_id;
 }
 
 export const createInvite = async (player: Player, team: Team) => {
-    let invite = new Invite();
+    const invite = new Invite();
     invite.player = player;
     invite.team = team;
     InviteRepository.save(invite);
@@ -133,8 +133,7 @@ export const renameTeam = async (team: Team, name:string) => {
     TeamRepository.save(team);
 }
 
-export const transferOwnership = async (oldOwner:Player, newOwner:Player) => {
-    oldOwner.captain = false;
-    newOwner.captain = true;
-    PlayerRepository.save([oldOwner, newOwner]);
+export const transferOwnership = async (team:Team, player:Player) => {
+    team.captain_id = player.id;
+    TeamRepository.save(team);
 }

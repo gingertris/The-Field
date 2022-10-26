@@ -12,6 +12,9 @@ export class Team {
     @Column({ unique:true})
     name: string
 
+    @Column({nullable:false})
+    captain_id: string
+
     @Column({
         type:"enum",
         enum: Division,

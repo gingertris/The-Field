@@ -47,7 +47,7 @@ export default {
         }
 
         try{ 
-            await transferOwnership(captain, newOwner)
+            await transferOwnership(team, newOwner)
         } catch (err){
             interaction.reply({content:err.message, ephemeral:true});
             return

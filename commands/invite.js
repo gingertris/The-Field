@@ -20,12 +20,22 @@ export default {
             return
         }
 
+
+
+        let team;
+        try{
+            team = await getTeam(captain.team.name);
+        } catch(err){
+            interaction.reply({content:`You need to \`/create\` a team before inviting people to your team.`, ephemeral:true})
+            return
+        }
+
+                
         if(!(await captainCheck(captain))){
             interaction.reply({content:"You need to be a team captain to run this command.", ephemeral:true});
             return;
         }
 
-        const team = await getTeam(captain.team.name);
         const playerUser = interaction.options.getUser("target");
 
         try{

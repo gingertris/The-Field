@@ -30,13 +30,11 @@ export default {
             let usernames = [];
             team.players.forEach(async p => usernames.push(await getUsername(interaction.client, p.id)));
 
-            let captainId = team.players.filter(player => player.captain)[0].id;
-
             const embed = new EmbedBuilder()
             .setColor("Fuchsia")
             .setTitle(`Info for ${team.name}`)
             .addFields(
-                {name: "Captain", value: `${await getUsername(interaction.client, captainId)}`},
+                {name: "Captain", value: `${await getUsername(interaction.client, team.captain_id)}`},
                 {name: "Members", value: `${usernames.join("\n")}`},
                 {name: "Region", value: `${team.region}`},
                 {name: "Division", value: `${team.division}`},
