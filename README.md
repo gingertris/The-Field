@@ -1,7 +1,7 @@
 # Tris' Field
 My attempt at a recreation of Psyonix x Rival Esports' The Field.
 
-# How will Tris’ field work?
+# How will Tris’ Field work?
 
 There will be 2 divisions: **Open Division** and **Closed Division**.
 
