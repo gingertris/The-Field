@@ -6,7 +6,7 @@ import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
 import { Division, Region } from './enums';
-import { editTeamDivision, getTeams } from './helpers';
+import { editTeamDivision, getTeams, resetTeam } from './helpers';
 import { getFullQueue } from './queue';
 
 const MatchRepository = AppDataSource.getRepository(Match);
@@ -98,6 +98,7 @@ export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, n
 const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //TODO: Make copy of leaderboard before promos and relegations?
+    //Also this doesn't check for game quota yet.
 
     const allTeams = await getTeams();
 
@@ -123,6 +124,7 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
     for(let i=0; i<(openTeams.length < teamsToPromote ? openTeams.length : teamsToPromote); i++){ //prevent index out of range if not many teams, lol
         const team = openTeams[i];
         await editTeamDivision(team, Division.CLOSED);
+        await resetTeam(team);
         team.players.forEach(async player => {
             (await client.users.fetch(player.id)).send("Congratulations, your team has been promoted to Closed Division!")
         });
@@ -134,6 +136,7 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
         for(let i=0; i<4; i++){
             const team = openTeams[i];
             await editTeamDivision(team, Division.OPEN);
+            await resetTeam(team);
             team.players.forEach(async player => {
                 (await client.users.fetch(player.id)).send("You have been demoted to Open Division.")
             });
