@@ -12,6 +12,7 @@ import Rename from '../commands/rename.js'
 import Transfer from '../commands/transfer.js'
 import Kick from '../commands/kick.js'
 import Gen from '../commands/gen.js'
+import Report from '../commands/report.js'
 const Commands = [
     Test,
     Create,
@@ -26,7 +27,8 @@ const Commands = [
     Rename,
     Transfer,
     Kick,
-    Gen
+    Gen,
+    Report
 ]
 
 export default Commands
