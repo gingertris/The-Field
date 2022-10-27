@@ -23,10 +23,10 @@ export class Match{
     @CreateDateColumn()
     date: Date
 
-    @Column()
+    @Column({default:0})
     team1difference: number
 
-    @Column()
+    @Column({default:0})
     team2difference: number
 
 }
