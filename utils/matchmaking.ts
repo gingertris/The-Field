@@ -119,9 +119,9 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
     })
 
     //promote open teams
-    let teamsToPromote = 4;
-    if(closedTeams.length < 16) teamsToPromote = 16 - closedTeams.length; //if closed is empty then fill up closed div
-    for(let i=0; i<(openTeams.length < teamsToPromote ? openTeams.length : teamsToPromote); i++){ //prevent index out of range if not many teams, lol
+    let teamsToSwap = 4;
+    if(closedTeams.length < 16) teamsToSwap = 16 - closedTeams.length; //if closed is empty then fill up closed div
+    for(let i=0; i<(openTeams.length < teamsToSwap ? openTeams.length : teamsToSwap); i++){ //prevent index out of range if not many teams, lol
         const team = openTeams[i];
         await editTeamDivision(team, Division.CLOSED);
         await resetTeam(team);
@@ -133,7 +133,7 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //if closed full, demote. this may change
     if(closedTeams.length >= 16){
-        for(let i=0; i<4; i++){
+        for(let i=0; i<teamsToSwap; i++){
             const team = openTeams[i];
             await editTeamDivision(team, Division.OPEN);
             await resetTeam(team);

@@ -36,7 +36,7 @@ export default {
         try{
             const player = await getPlayer(playerUser.id);
 
-            if(player.team != captain.team) {
+            if(player.team.id != captain.team.id) {
                 interaction.reply({content:"The player you're kicking needs to be on your team to begin with.", ephemeral:true});
                 return;
             }

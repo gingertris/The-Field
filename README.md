@@ -7,7 +7,7 @@ There will be 2 divisions: **Open Division** and **Closed Division**.
 
 Closed Division capped at 16 teams (but may increase with more users). Open Division is open for anyone.
 
-*For Season 1, all teams start in Open Division. Top 16 in Open Division at the end of the month get promoted to Closed Division for future seasons.*
+*For Season 1, all teams who have qualified for an RLCS 22-23 Closed Qualifier are invited to join Closed Division.*
 
 At the start of each month, all teams reset to 1000 points. Players can gain/lose rating throughout the month. 
 

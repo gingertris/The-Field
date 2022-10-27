@@ -45,7 +45,7 @@ export default {
 
 
         }catch(err){
-            interaction.reply({content:`${err.message} Are you registered? Use the \`/register\` command to register before you can do anything else.`, ephemeral:true});
+            interaction.reply({content:`${err.message}`, ephemeral:true});
             console.log(err)
             return
         }

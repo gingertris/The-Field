@@ -3,7 +3,7 @@ import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
 import { Division, Region } from './enums'
-import { getPlayer} from './helpers';
+import { getPlayer, getTeam, getTeamByID} from './helpers';
 
 const QueueRepository = AppDataSource.getRepository(Queue);
 
@@ -11,12 +11,14 @@ export const handleJoinQueue = async (interaction: ButtonInteraction) => {
 
     let player;
     try{
-        player = await getPlayer(interaction.user.id)
+        player = await getPlayer(interaction.user.id);
+        
         if(!player.team){
             interaction.reply({content:"You aren't in a team.", ephemeral:true});
             return
         }
-        if(player.team.players.length < 3){
+        const team = await getTeamByID(player.team.id);
+        if(team.players.length < 3){
             interaction.reply({content:"Your team needs to have at least 3 members to be able to queue.", ephemeral:true});
             return
         }
