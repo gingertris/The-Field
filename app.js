@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits, Events, Collection } from "discord.js"
 import * as dotenv from 'dotenv'
 import commands from './utils/commands.js'
-import { Jobs } from "./utils/matchmaking"
+import { Jobs } from "./utils/match"
 import { handleJoinQueue, handleLeaveQueue } from "./utils/queue"
 dotenv.config()
 

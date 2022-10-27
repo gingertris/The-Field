@@ -247,6 +247,16 @@ const createMatch = async (team1: Team, team2: Team, powerHour:boolean) => {
     
 }
 
+export const getMatch = async (id:number) => {
+    const match = await MatchRepository.findOne({
+        where:{
+            id:id
+        }
+    });
+    if(!match) throw new Error(`No match found with id ${id}`);
+    return match;
+}
+
 const generatePassword = () => {
     return randomBytes(2).toString('hex');
 }

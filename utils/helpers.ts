@@ -94,6 +94,17 @@ export const editTeamDivision = async (team: Team, division:Division) => {
 export const resetTeam = async (team:Team) => {
     team.gamesPlayed = 0;
     team.rating = 1000;
+    await TeamRepository.save(team);
+}
+
+export const setTeamRating = async (team:Team, rating:number) => {
+    team.rating = rating;
+    TeamRepository.save(team);
+}
+
+export const setTeamGamesPlayed = async (team:Team, games:number) => {
+    team.gamesPlayed = games;
+    TeamRepository.save(team);
 }
 
 export const getTeams = async () => {

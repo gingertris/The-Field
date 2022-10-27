@@ -7,7 +7,7 @@ export default {
         .setDescription("Register for Tris' Field")
         .addStringOption(option => 
             option
-                .setName("username")
+                .setName("id")
                 .setDescription("Set your username")
                 .setRequired(true)
                 .setMaxLength(32)

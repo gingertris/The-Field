@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Region } from "../utils/enums";
-import { promoteAndRelegate } from "../utils/matchmaking";
+import { promoteAndRelegate } from "../utils/match";
 
 export default {
     data: new SlashCommandBuilder()
