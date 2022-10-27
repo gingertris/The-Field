@@ -6,6 +6,7 @@ import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
 import { Division, Region } from './enums';
+import { editTeamDivision, getTeams } from './helpers';
 import { getFullQueue } from './queue';
 
 const MatchRepository = AppDataSource.getRepository(Match);
@@ -14,15 +15,18 @@ const MatchRepository = AppDataSource.getRepository(Match);
 const weekdayRule = new RecurrenceRule();
 weekdayRule.dayOfWeek = [new Range(1,5)];
 weekdayRule.hour = [new Range(18,22)];
+weekdayRule.minute = 0;
 
 
 const weekendRule = new RecurrenceRule();
 weekendRule.dayOfWeek = [0,6];
 weekendRule.hour = [new Range(16,18), 22];
+weekendRule.minute = 0;
 
 const powerHourRule = new RecurrenceRule();
 powerHourRule.dayOfWeek = [0,6];
 powerHourRule.hour = [new Range(19,21)];
+powerHourRule.minute = 0;
 
 //set timezones
 const euWeekdayRule = structuredClone(weekdayRule);
@@ -42,6 +46,26 @@ naWeekendRule.tz = 'est';
 
 const naPowerHourRule = structuredClone(powerHourRule);
 naPowerHourRule.tz = 'est';
+
+const promotionRelegationRule = new RecurrenceRule();
+promotionRelegationRule.date = 1;
+promotionRelegationRule.hour = 0;
+promotionRelegationRule.minute = 0;
+
+const euPromotionRelegationRule = structuredClone(promotionRelegationRule);
+euPromotionRelegationRule.tz = 'cet'
+
+const naPromotionRelegationRule = structuredClone(promotionRelegationRule);
+naPromotionRelegationRule.tz = 'est'
+
+export const euPromotionRelegationJob = async (client: Client) => {
+    await promoteAndRelegate(client, Region.EU);
+}
+
+export const naPromotionRelegationJob = async (client: Client) => {
+    await promoteAndRelegate(client, Region.NA);
+}
+
 
 //methods
 
@@ -69,7 +93,56 @@ const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, ()=>{
     createMatches(client, true, Region.NA)
 })
 
-export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob]
+export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, euPromotionRelegationJob, naPromotionRelegationJob]
+
+const promoteAndRelegate = async (client: Client, region:Region) => {
+
+    //TODO: Make copy of leaderboard before promos and relegations?
+
+    const allTeams = await getTeams();
+
+    let openTeams = allTeams.filter(t => t.region == region && t.division == Division.OPEN);
+
+    let closedTeams = allTeams.filter(t => t.region == region && t.division == Division.OPEN);
+
+
+    //sort teams
+    openTeams = openTeams.sort((a,b)=>{
+        //highest first
+        return b.rating - a.rating
+    })
+
+    closedTeams = closedTeams.sort((a,b)=>{
+        //lowest first
+        return a.rating - b.rating
+    })
+
+    //promote open teams
+    let teamsToPromote = 4;
+    if(closedTeams.length < 16) teamsToPromote = 16 - closedTeams.length; //if closed is empty then fill up closed div
+    for(let i=0; i<(openTeams.length < teamsToPromote ? openTeams.length : teamsToPromote); i++){ //prevent index out of range if not many teams, lol
+        const team = openTeams[i];
+        await editTeamDivision(team, Division.CLOSED);
+        team.players.forEach(async player => {
+            (await client.users.fetch(player.id)).send("Congratulations, your team has been promoted to Closed Division!")
+        });
+    }
+
+
+    //if closed full, demote. this may change
+    if(closedTeams.length >= 16){
+        for(let i=0; i<4; i++){
+            const team = openTeams[i];
+            await editTeamDivision(team, Division.OPEN);
+            team.players.forEach(async player => {
+                (await client.users.fetch(player.id)).send("You have been demoted to Open Division.")
+            });
+        }
+    }
+
+
+
+}
 
 const createMatches = async (client: Client, powerHour: boolean, region:Region) => {
     const allQueue = await getFullQueue();

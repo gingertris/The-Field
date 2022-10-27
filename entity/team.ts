@@ -32,6 +32,9 @@ export class Team {
     @Column({default:1000})
     rating: number
 
+    @Column({default:0})
+    gamesPlayed:number
+
     @OneToMany(() => Player, (player) => player.team, {onDelete:"SET NULL"})
     players: Player[]
 

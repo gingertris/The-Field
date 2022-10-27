@@ -88,6 +88,17 @@ export const getTeam = async (name: string) => {
     throw new Error("Team not found.")
 }
 
+export const editTeamDivision = async (team: Team, division:Division) => {
+    team.division = division;
+    await TeamRepository.save(team);
+}
+
+export const getTeams = async () => {
+    const teams = await TeamRepository.find()
+    if(!teams) throw new Error("No teams found.");
+    return teams;
+}
+
 export const getTeamByID = async (id:number) => {
     const team = await TeamRepository.findOne({
         where:{
