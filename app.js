@@ -18,6 +18,7 @@ client.once(Events.ClientReady, () => {
 	//load jobs
 	Jobs.forEach(job=>{
 		job(client);
+		console.log(`Loaded job ${job.name}`)
 	})
 });
 

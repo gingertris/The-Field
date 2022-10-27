@@ -14,7 +14,7 @@ export class Match{
     @JoinColumn()
     team2: Team
 
-    @Column()
+    @Column({nullable:true})
     winner_id: number
 
     @Column()

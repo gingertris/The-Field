@@ -6,8 +6,8 @@ import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
 import { Division, Region } from './enums';
-import { editTeamDivision, getTeams, resetTeam } from './helpers';
-import { getFullQueue } from './queue';
+import { editTeamDivision, getTeamByID, getTeams, resetTeam } from './helpers';
+import { emptyQueue, getFullQueue } from './queue';
 
 const MatchRepository = AppDataSource.getRepository(Match);
 
@@ -58,42 +58,43 @@ euPromotionRelegationRule.tz = 'cet'
 const naPromotionRelegationRule = structuredClone(promotionRelegationRule);
 naPromotionRelegationRule.tz = 'est'
 
-export const euPromotionRelegationJob = async (client: Client) => {
+export const euPromotionRelegationJob = (client: Client) => scheduleJob(euPromotionRelegationRule, async () =>{
     await promoteAndRelegate(client, Region.EU);
-}
+})
 
-export const naPromotionRelegationJob = async (client: Client) => {
+export const naPromotionRelegationJob = (client: Client) => scheduleJob(naPromotionRelegationRule, async () =>{
     await promoteAndRelegate(client, Region.NA);
-}
+})
 
 
 //methods
 
-const euWeekdayJob = (client: Client) => scheduleJob(euWeekdayRule, ()=>{
-    createMatches(client, false, Region.EU)
+const euWeekdayJob = (client: Client) => scheduleJob(euWeekdayRule, async ()=>{
+    await createMatches(client, false, Region.EU)
 })
 
-const euWeekendJob = (client: Client) => scheduleJob(euWeekendRule, ()=>{
-    createMatches(client, false, Region.EU)
+const euWeekendJob = (client: Client) => scheduleJob(euWeekendRule, async ()=>{
+    await createMatches(client, false, Region.EU)
 })
 
-const euPowerHourJob = (client: Client) => scheduleJob(euPowerHourRule, ()=>{
-    createMatches(client, true, Region.EU)
+const euPowerHourJob = (client: Client) => scheduleJob(euPowerHourRule, async ()=>{
+    await createMatches(client, true, Region.EU)
 })
 
-const naWeekdayJob = (client: Client) => scheduleJob(naWeekdayRule, ()=>{
-    createMatches(client, false, Region.NA)
+const naWeekdayJob = (client: Client) => scheduleJob(naWeekdayRule, async ()=>{
+    await createMatches(client, false, Region.NA)
 })
 
-const naWeekendJob = (client: Client) => scheduleJob(naWeekendRule, ()=>{
-    createMatches(client, false, Region.NA)
+const naWeekendJob = (client: Client) => scheduleJob(naWeekendRule, async ()=>{
+    await createMatches(client, false, Region.NA)
 })
 
-const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, ()=>{
-    createMatches(client, true, Region.NA)
+const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, async ()=>{
+    await createMatches(client, true, Region.NA)
 })
 
 export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, euPromotionRelegationJob, naPromotionRelegationJob]
+//remember to add , euPromotionRelegationJob, naPromotionRelegationJob back
 
 const promoteAndRelegate = async (client: Client, region:Region) => {
 
@@ -122,11 +123,16 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
     let teamsToSwap = 4;
     if(closedTeams.length < 16) teamsToSwap = 16 - closedTeams.length; //if closed is empty then fill up closed div
     for(let i=0; i<(openTeams.length < teamsToSwap ? openTeams.length : teamsToSwap); i++){ //prevent index out of range if not many teams, lol
-        const team = openTeams[i];
+        console.log(openTeams);
+        const team = await getTeamByID(openTeams[i].id);
         await editTeamDivision(team, Division.CLOSED);
         await resetTeam(team);
         team.players.forEach(async player => {
-            (await client.users.fetch(player.id)).send("Congratulations, your team has been promoted to Closed Division!")
+            try{
+                (await client.users.fetch(player.id)).send("Congratulations, your team has been promoted to Closed Division!")
+            } catch(err){
+                console.log(err)
+            }
         });
     }
 
@@ -134,11 +140,16 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
     //if closed full, demote. this may change
     if(closedTeams.length >= 16){
         for(let i=0; i<teamsToSwap; i++){
-            const team = openTeams[i];
+            const team = await getTeamByID(closedTeams[i].id);
             await editTeamDivision(team, Division.OPEN);
             await resetTeam(team);
             team.players.forEach(async player => {
-                (await client.users.fetch(player.id)).send("You have been demoted to Open Division.")
+                try{
+                    (await client.users.fetch(player.id)).send("You have been demoted to Open Division.")
+                }catch(err){
+                    console.log(err)
+                }
+                
             });
         }
     }
@@ -147,17 +158,19 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
 
 }
 
-const createMatches = async (client: Client, powerHour: boolean, region:Region) => {
+export const createMatches = async (client: Client, powerHour: boolean, region:Region) => {
     const allQueue = await getFullQueue();
     const queues:[Queue[]] = [[]];
 
     //divide queues
-
-    for(const division in [Division.CLOSED, Division.OPEN]) {
-        queues.push(allQueue.filter(q => q.region == region && q.division == division))
+    for(const division in Division) {
+        queues.push(allQueue.filter(q => {
+            return (q.region as Region) == (region as Region) && (q.division as Division) == (division as Division)
+        }))
     }
 
     queues.forEach(async queue => {
+
         //create matches
         if(queue.length % 2 === 1){
             queue = queue.sort((a,b) => {
@@ -187,12 +200,15 @@ const createMatches = async (client: Client, powerHour: boolean, region:Region) 
 
                 const embed = new EmbedBuilder()
                     .setTitle("Match Details")
-                    .setDescription(`Match ID: ${match.id}`);
-                [match.team1, match.team2].forEach(team => {
+                    .setColor("Fuchsia")
+                    .setTimestamp()
+                    .setFooter({text:`Match ID: ${match.id}`});
+                [match.team1, match.team2].forEach(async team => {
+                    const fullTeam = await getTeamByID(team.id);
                     embed.addFields({
-                        name:`${team.name}`,
-                        value:`${team.players.map(p => {
-                            if(p.id == team1.captain_id){
+                        name:`${fullTeam.name} (${fullTeam.rating})`,
+                        value:`${fullTeam.players.map(p => {
+                            if(p.id == fullTeam.captain_id){
                                 return `${p.username} (C)`
                             } else {
                                 return p.username;
@@ -203,6 +219,7 @@ const createMatches = async (client: Client, powerHour: boolean, region:Region) 
                 });
                 const matchName = match.team1.region.toString().toUpperCase() + match.team1.division.toString().toUpperCase().charAt(0) + match.id.toString()
                 const matchPass = generatePassword();
+
                 embed.addFields({name:"Lobby Details", value:`Name: ${matchName}\nPassword: ${matchPass}\n${team1.name} creates the lobby.`});
                 embed.addFields({name:"Score Reporting", value:`To report the score, use the \`/report\` command, then select Match #${match.id}, then fill in the score.`});
                 (await client.users.fetch(team1.captain_id)).send({embeds:[embed]});
@@ -213,6 +230,8 @@ const createMatches = async (client: Client, powerHour: boolean, region:Region) 
 
 
     })
+
+    await emptyQueue();
 }
 
 const createMatch = async (team1: Team, team2: Team, powerHour:boolean) => {

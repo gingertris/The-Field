@@ -121,6 +121,8 @@ export const captainCheck = async (player: Player) => {
     if(!player.team) throw new Error(`Player is not on a team.`)
     const team = await getTeamByID(player.team.id);
 
+    
+
     return player.id == team.captain_id;
 }
 

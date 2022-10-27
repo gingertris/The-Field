@@ -4,6 +4,6 @@ export enum Region {
 }
 
 export enum Division {
-    OPEN = "Open",
-    CLOSED = "Closed",
+    OPEN = "OPEN",
+    CLOSED = "CLOSED",
 }

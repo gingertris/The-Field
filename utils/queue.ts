@@ -77,6 +77,9 @@ export const handleLeaveQueue =  async (interaction: ButtonInteraction) => {
 
 export const getFullQueue = async () => {
     const queue = await QueueRepository.find()
+
+    console.log(queue);
+
     if(!queue) throw new Error("No queue found.");
     return queue;
 }
