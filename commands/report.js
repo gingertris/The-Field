@@ -10,11 +10,8 @@ export default {
         .addIntegerOption(option => 
             option
                 .setName("id")
-                .setDescription("Set your username")
+                .setDescription("Match ID to report")
                 .setRequired(true)
-                .setMaxLength(32)
-                .setMinLength(1)
-
         )
         .addStringOption(option => 
             option
@@ -84,6 +81,9 @@ export default {
         match = await reportMatch(match, winner);
 
         await messageCaptains(interaction.client, match)
+
+        interaction.reply({content:`Scores have been reported, and Team Captains have been messaged details.`, ephemeral:true});
+        return
 
     }
 }

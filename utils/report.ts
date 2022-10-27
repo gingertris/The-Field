@@ -25,7 +25,7 @@ export const reportMatch = async (match:Match, winnerVal:winnerType) => {
     }
 
     const team1Difference = winnerVal == 1 ? newWinnerRating - oldWinnerRating : newLoserRating - oldLoserRating;
-    const team2Difference = winnerVal == 1 ? newWinnerRating - oldWinnerRating : newLoserRating - oldLoserRating;
+    const team2Difference = winnerVal == 2 ? newWinnerRating - oldWinnerRating : newLoserRating - oldLoserRating;
 
     await setTeamRating(winner, newWinnerRating)
     await setTeamRating(loser, newLoserRating)
@@ -46,7 +46,7 @@ const calcuateRating = (winner:number, loser:number) => {
     const expectedScoreWinner = elo.getExpected(winner, loser);
     const expectedScoreLoser = elo.getExpected(loser, winner);
 
-    return {winner:elo.updateRating(expectedScoreWinner, 1, winner), loser: elo.updateRating(expectedScoreLoser, 0, winner)}
+    return {winner:elo.updateRating(expectedScoreWinner, 1, winner), loser: elo.updateRating(expectedScoreLoser, 0, loser)}
 
 }
 
@@ -65,8 +65,8 @@ export const messageCaptains = async (client:Client, match:Match) => {
         .setTimestamp()
         .setFooter({text:`Match ID: ${match.id}`});
   
-    embed.addFields({name:"Winner", "value":`${winners.name} (+${winnersDiff})`, inline:true});
-    embed.addFields({name:"Loser", "value":`${losers.name} (-${losersDiff})`, inline:true});
+    embed.addFields({name:"Winner", "value":`${winners.name} (${winners.rating} +${winnersDiff})`, inline:true});
+    embed.addFields({name:"Loser", "value":`${losers.name} (${losers.rating} ${losersDiff})`, inline:true});
 
     embed.addFields({name:"Is this wrong?", value:"If you believe this score was reported incorrectly, please contact a moderator."});
 

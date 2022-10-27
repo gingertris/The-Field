@@ -107,10 +107,6 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
 
     let closedTeams = allTeams.filter(t => t.region == region && t.division == Division.OPEN);
 
-
-    console.log(openTeams);
-    console.log(closedTeams);
-
     //sort teams
     openTeams = openTeams.sort((a,b)=>{
         //highest first
@@ -126,9 +122,9 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
     let teamsToSwap = 4;
     if(closedTeams.length < 16) teamsToSwap = 16 - closedTeams.length; //if closed is empty then fill up closed div
     for(let i=0; i<(openTeams.length < teamsToSwap ? openTeams.length : teamsToSwap); i++){ //prevent index out of range if not many teams, lol
-        console.log(openTeams);
+
         const team = openTeams[i];
-        console.log(team)
+ 
         await editTeamDivision(team, Division.CLOSED);
         await resetTeam(team);
         team.players.forEach(async player => {
@@ -203,7 +199,7 @@ export const createMatches = async (client: Client, powerHour: boolean, region:R
                 const match = await createMatch(team1, team2, powerHour);
 
                 const embed = new EmbedBuilder()
-                    .setTitle("Match Details")
+                    .setTitle(`Match ${match.id}`)
                     .setColor("Fuchsia")
                     .setTimestamp()
                     .setFooter({text:`Match ID: ${match.id}`});
@@ -225,7 +221,8 @@ export const createMatches = async (client: Client, powerHour: boolean, region:R
                 const matchPass = generatePassword();
 
                 embed.addFields({name:"Lobby Details", value:`Name: ${matchName}\nPassword: ${matchPass}\n${team1.name} creates the lobby.`});
-                embed.addFields({name:"Score Reporting", value:`To report the score, use the \`/report\` command, then select Match #${match.id}, then fill in the score.`});
+                embed.addFields({name:"Score Reporting", value:`To report the score, use the \`/report\` command.`});
+                embed.addFields({name:"Example Usage", value:`\`/report ${match.id} Win\``});
                 (await client.users.fetch(team1.captain_id)).send({embeds:[embed]});
                 (await client.users.fetch(team2.captain_id)).send({embeds:[embed]});
             }
