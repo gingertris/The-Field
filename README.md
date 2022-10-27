@@ -102,12 +102,9 @@ Kicks @User from team.
     
 You need to be the Captain of your team to use this command.
 
-`/report`
+`/report <id> Win|Loss`
 	
 Report match score. 
-
-*How? Gives user a message with a Win button and a Loss button. 
-When one team reports, bot can message the captain of the other team asking to confirm the score, with its own interaction.*
 
 `/info @User`
 
