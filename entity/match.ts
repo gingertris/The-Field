@@ -23,4 +23,10 @@ export class Match{
     @CreateDateColumn()
     date: Date
 
+    @Column()
+    team1difference: number
+
+    @Column()
+    team2difference: number
+
 }

@@ -260,3 +260,7 @@ export const getMatch = async (id:number) => {
 const generatePassword = () => {
     return randomBytes(2).toString('hex');
 }
+
+export const updateMatch = async (match:Match) => {
+    return await MatchRepository.save(match);
+}
