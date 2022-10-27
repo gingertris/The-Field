@@ -96,7 +96,7 @@ const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, async ()
 export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, euPromotionRelegationJob, naPromotionRelegationJob]
 //remember to add , euPromotionRelegationJob, naPromotionRelegationJob back
 
-const promoteAndRelegate = async (client: Client, region:Region) => {
+export const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //TODO: Make copy of leaderboard before promos and relegations?
     //Also this doesn't check for game quota yet.
@@ -107,6 +107,9 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
 
     let closedTeams = allTeams.filter(t => t.region == region && t.division == Division.OPEN);
 
+
+    console.log(openTeams);
+    console.log(closedTeams);
 
     //sort teams
     openTeams = openTeams.sort((a,b)=>{
@@ -124,7 +127,8 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
     if(closedTeams.length < 16) teamsToSwap = 16 - closedTeams.length; //if closed is empty then fill up closed div
     for(let i=0; i<(openTeams.length < teamsToSwap ? openTeams.length : teamsToSwap); i++){ //prevent index out of range if not many teams, lol
         console.log(openTeams);
-        const team = await getTeamByID(openTeams[i].id);
+        const team = openTeams[i];
+        console.log(team)
         await editTeamDivision(team, Division.CLOSED);
         await resetTeam(team);
         team.players.forEach(async player => {
@@ -146,8 +150,8 @@ const promoteAndRelegate = async (client: Client, region:Region) => {
             team.players.forEach(async player => {
                 try{
                     (await client.users.fetch(player.id)).send("You have been demoted to Open Division.")
-                }catch(err){
-                    console.log(err)
+                }catch(err:unknown){
+                    console.log(err)                    
                 }
                 
             });

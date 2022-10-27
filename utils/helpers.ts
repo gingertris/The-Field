@@ -2,13 +2,11 @@ import { Player } from "../entity/player"
 import { Division, Region } from "./enums";
 import { Team } from "../entity/team";
 import AppDataSource from "./AppDataSource";
-import {BaseInteraction, Client, CommandInteraction, GuildMember, User} from "discord.js"
+import { GuildMember } from "discord.js"
 import { Invite } from "../entity/invite";
 
 import * as dotenv from 'dotenv'
 dotenv.config()
-
-const guildId = process.env.GUILD_ID;
 
 const PlayerRepository = AppDataSource.getRepository(Player);
 const TeamRepository = AppDataSource.getRepository(Team);
@@ -99,7 +97,7 @@ export const resetTeam = async (team:Team) => {
 }
 
 export const getTeams = async () => {
-    const teams = await TeamRepository.find()
+    const teams = await TeamRepository.find({relations:['players']})
     if(!teams) throw new Error("No teams found.");
     return teams;
 }

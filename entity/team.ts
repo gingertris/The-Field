@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne , DeleteDateColumn} from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { Player } from "./player"
 
 import { Division, Region } from "../utils/enums"

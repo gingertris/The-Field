@@ -1,5 +1,5 @@
 
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { Division, Region } from "../utils/enums";
 import { Team } from "./team";
 

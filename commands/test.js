@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Region } from "../utils/enums";
-import { createMatches } from "../utils/matchmaking";
+import { promoteAndRelegate } from "../utils/matchmaking";
 
 export default {
     data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ export default {
         .setDescription("Test command"),
     async execute(interaction){
 
-        await createMatches(interaction.client, false, Region.EU);
+        await promoteAndRelegate(interaction.client, Region.EU)
         await interaction.reply('Tested!');
     }
 }

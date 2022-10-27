@@ -2,8 +2,7 @@ import {ButtonInteraction} from 'discord.js'
 import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
-import { Division, Region } from './enums'
-import { getPlayer, getTeam, getTeamByID} from './helpers';
+import { getPlayer, getTeamByID} from './helpers';
 
 const QueueRepository = AppDataSource.getRepository(Queue);
 

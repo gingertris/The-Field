@@ -1,8 +1,6 @@
 import { Client, GatewayIntentBits, Events, Collection } from "discord.js"
 import * as dotenv from 'dotenv'
-import AppDataSource from './utils/AppDataSource.ts'
 import commands from './utils/commands.js'
-import interactions from './utils/interactions.js' //custom interactions
 import { Jobs } from "./utils/matchmaking"
 import { handleJoinQueue, handleLeaveQueue } from "./utils/queue"
 dotenv.config()
