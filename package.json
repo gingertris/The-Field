@@ -13,7 +13,9 @@
   "dependencies": {
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
     "elo-rank": "^1.0.4",
+    "express": "^4.18.2",
     "node-schedule": "^2.1.0",
     "nodemon": "^2.0.20",
     "pg": "^8.8.0",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@types/elo-rank": "^1.0.1",
+    "@types/express": "^4.17.14",
     "@types/node": "^18.11.4",
     "@types/node-schedule": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "5.40.1",

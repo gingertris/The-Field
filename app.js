@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv'
 import commands from './utils/commands.js'
 import { Jobs } from "./utils/match"
 import { handleJoinQueue, handleLeaveQueue } from "./utils/queue"
+import router from './utils/router'
+import express from 'express'
 dotenv.config()
 
 
@@ -18,6 +20,14 @@ client.once(Events.ClientReady, () => {
 		job(client);
 		console.log(`Loaded job ${job.name}`)
 	})
+
+	//start web server
+
+	const port = 3000;
+	const app = express()
+	app.set('view engine', 'ejs')
+	app.use('/', router);
+	app.listen(port, ()=>console.log(`Express listening on port ${port}`))
 });
 
 //load commands (shamelessly stolen from discord.js tutorial)
