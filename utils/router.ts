@@ -55,4 +55,9 @@ router.get('/na/closed', async (req, res) => {
     
 });
 
+//The 404 Route (ALWAYS Keep this as the last route)
+router.get('*', function(req, res){
+  res.status(404).send('Nice try.');
+});
+
 export default router;
