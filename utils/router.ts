@@ -4,10 +4,12 @@ import { getTeams } from './helpers';
 
 const router = Router();
 
+const minGamesPlayed = 0; 
+
 router.get('/eu/open', async (req, res) => {
 
     let teams = await getTeams();
-    teams = teams.filter(t => t.region == Region.EU && t.division == Division.OPEN).sort((a,b) => {return b.rating - a.rating})
+    teams = teams.filter(t => t.region == Region.EU && t.division == Division.OPEN && t.gamesPlayed > minGamesPlayed).sort((a,b) => {return b.rating - a.rating})
 
     res.render('leaderboard.ejs', {
         title:"EU - Open Division",
@@ -20,7 +22,7 @@ router.get('/eu/open', async (req, res) => {
 router.get('/eu/closed', async (req, res) => {
 
     let teams = await getTeams();
-    teams = teams.filter(t => t.region == Region.EU && t.division == Division.CLOSED).sort((a,b) => {return b.rating - a.rating})
+    teams = teams.filter(t => t.region == Region.EU && t.division == Division.CLOSED && t.gamesPlayed > minGamesPlayed).sort((a,b) => {return b.rating - a.rating})
 
     res.render('leaderboard.ejs', {
         title:"EU - Closed Division",
@@ -33,7 +35,7 @@ router.get('/eu/closed', async (req, res) => {
 router.get('/na/open', async (req, res) => {
 
     let teams = await getTeams();
-    teams = teams.filter(t => t.region == Region.NA && t.division == Division.OPEN).sort((a,b) => {return b.rating - a.rating})
+    teams = teams.filter(t => t.region == Region.NA && t.division == Division.OPEN && t.gamesPlayed > minGamesPlayed).sort((a,b) => {return b.rating - a.rating})
 
     res.render('leaderboard.ejs', {
         title:"EU - Open Division",
@@ -46,7 +48,7 @@ router.get('/na/open', async (req, res) => {
 router.get('/na/closed', async (req, res) => {
 
     let teams = await getTeams();
-    teams = teams.filter(t => t.region == Region.NA && t.division == Division.CLOSED).sort((a,b) => {return b.rating - a.rating})
+    teams = teams.filter(t => t.region == Region.NA && t.division == Division.CLOSED && t.gamesPlayed > minGamesPlayed).sort((a,b) => {return b.rating - a.rating})
 
     res.render('leaderboard.ejs', {
         title:"EU - Open Division",
