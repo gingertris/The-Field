@@ -4,7 +4,7 @@ import { REST, Routes } from 'discord.js'
 import dotenv from 'dotenv'
 dotenv.config()
 const guildId = process.env.GUILD_ID;
-const clientId = "428307375124905994";
+const clientId =  process.env.BOT_CLIENT_ID;
 const token = process.env.BOT_TOKEN;
 
 import commands from './utils/commands.js'
