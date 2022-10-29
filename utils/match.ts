@@ -20,7 +20,7 @@ weekdayRule.minute = 0;
 
 const weekendRule = new RecurrenceRule();
 weekendRule.dayOfWeek = [0,6];
-weekendRule.hour = [new Range(16,18), 22];
+weekendRule.hour = [8, new Range(16,18), 22];
 weekendRule.minute = 0;
 
 const powerHourRule = new RecurrenceRule();
@@ -30,22 +30,22 @@ powerHourRule.minute = 0;
 
 //set timezones
 const euWeekdayRule = structuredClone(weekdayRule);
-euWeekdayRule.tz = 'cet';
+euWeekdayRule.tz = 'Europe/Berlin';
 
 const euWeekendRule = structuredClone(weekendRule);
-euWeekendRule.tz = 'cet';
+euWeekendRule.tz = 'Europe/Berlin';
 
 const euPowerHourRule = structuredClone(powerHourRule);
-euPowerHourRule.tz = 'cet';
+euPowerHourRule.tz = 'Europe/Berlin';
 
 const naWeekdayRule = structuredClone(weekdayRule);
-naWeekdayRule.tz = 'est';
+naWeekdayRule.tz = 'America/Cancun';
 
 const naWeekendRule = structuredClone(weekendRule);
-naWeekendRule.tz = 'est';
+naWeekendRule.tz = 'America/Cancun';
 
 const naPowerHourRule = structuredClone(powerHourRule);
-naPowerHourRule.tz = 'est';
+naPowerHourRule.tz = 'America/Cancun';
 
 const promotionRelegationRule = new RecurrenceRule();
 promotionRelegationRule.date = 1;
@@ -71,26 +71,32 @@ export const naPromotionRelegationJob = (client: Client) => scheduleJob(naPromot
 
 const euWeekdayJob = (client: Client) => scheduleJob(euWeekdayRule, async ()=>{
     await createMatches(client, false, Region.EU)
+    console.log("euWeekdayJob");
 })
 
 const euWeekendJob = (client: Client) => scheduleJob(euWeekendRule, async ()=>{
     await createMatches(client, false, Region.EU)
+    console.log("euWeekendJob");
 })
 
 const euPowerHourJob = (client: Client) => scheduleJob(euPowerHourRule, async ()=>{
     await createMatches(client, true, Region.EU)
+    console.log("euPowerHourJob");
 })
 
 const naWeekdayJob = (client: Client) => scheduleJob(naWeekdayRule, async ()=>{
     await createMatches(client, false, Region.NA)
+    console.log("naWeekdayJob");
 })
 
 const naWeekendJob = (client: Client) => scheduleJob(naWeekendRule, async ()=>{
     await createMatches(client, false, Region.NA)
+    console.log("naWeekendJob");
 })
 
 const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, async ()=>{
     await createMatches(client, true, Region.NA)
+    console.log("naPowerHourJob");
 })
 
 export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, euPromotionRelegationJob, naPromotionRelegationJob]
