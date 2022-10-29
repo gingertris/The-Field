@@ -17,7 +17,7 @@ client.once(Events.ClientReady, () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	//load jobs
 	Jobs.forEach(job=>{
-		const executedjob = job(client);
+		job(client);
 		console.log(`Loaded job ${job.name}`)
 	})
 
