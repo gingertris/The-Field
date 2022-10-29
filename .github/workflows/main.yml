@@ -2,10 +2,6 @@ on:
   push:
     branches: ['main']
     
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,4 +35,4 @@ jobs:
         run: |
           eval $(ssh-agent -s)
           echo '${{ secrets.PRIVATE_KEY }}' | tr -d '\r' | ssh-add -
-          ssh -o StrictHostKeyChecking=no '${{ secrets.USERNAME }}@${{ secrets.HOST }}' 'cd ~/; docker-compose pull; docker-compose up -d'
+          ssh -o StrictHostKeyChecking=no '${{ secrets.USERNAME }}@${{ secrets.HOST }}' 'cd ~/field; docker-compose pull; docker-compose up -d'
