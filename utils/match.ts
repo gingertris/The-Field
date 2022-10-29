@@ -53,10 +53,10 @@ promotionRelegationRule.hour = 0;
 promotionRelegationRule.minute = 0;
 
 const euPromotionRelegationRule = structuredClone(promotionRelegationRule);
-euPromotionRelegationRule.tz = 'cet'
+euPromotionRelegationRule.tz = 'Europe/Berlin'
 
 const naPromotionRelegationRule = structuredClone(promotionRelegationRule);
-naPromotionRelegationRule.tz = 'est'
+naPromotionRelegationRule.tz = 'America/Cancun'
 
 export const euPromotionRelegationJob = (client: Client) => scheduleJob(euPromotionRelegationRule, async () =>{
     await promoteAndRelegate(client, Region.EU);
@@ -106,6 +106,8 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //TODO: Make copy of leaderboard before promos and relegations?
     //Also this doesn't check for game quota yet.
+
+    console.log("promoteAndRelegate")
 
     const allTeams = await getTeams();
 
@@ -165,6 +167,9 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
 }
 
 export const createMatches = async (client: Client, powerHour: boolean, region:Region) => {
+
+    console.log("createMatches")
+
     const allQueue = await getFullQueue();
     const queues:[Queue[]] = [[]];
 
