@@ -61,6 +61,7 @@ export default {
         
         try{
             await syncRoles(interaction.member)
+            await interaction.member.setNickname(username);
         } catch(err){
             console.log("unable to change nickname of user " + username)
         }
