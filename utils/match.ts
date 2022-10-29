@@ -20,7 +20,7 @@ weekdayRule.minute = 0;
 
 const weekendRule = new RecurrenceRule();
 weekendRule.dayOfWeek = [0,6];
-weekendRule.hour = [8, new Range(16,18), 22];
+weekendRule.hour = [new Range(16,18), 22];
 weekendRule.minute = 0;
 
 const powerHourRule = new RecurrenceRule();
