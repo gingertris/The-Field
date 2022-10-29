@@ -6,7 +6,7 @@ FROM base as builder
 
 WORKDIR /app
 
-COPY . . 
+COPY . .
 
 RUN npm install
 
@@ -17,10 +17,10 @@ FROM base
 WORKDIR /app
 
 COPY --from=builder /app/build .
-
+COPY --from=builder /app/views ./views
 COPY --from=builder /app/package*.json .
 
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 EXPOSE 8000
 

@@ -4,3 +4,5 @@ config.json
 .vscode
 build
 docker-compose.yml
+.env_pg
+.env_bot
