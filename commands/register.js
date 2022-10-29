@@ -58,12 +58,10 @@ export default {
             return;
         }
 
-        await syncRoles(interaction.member)
+        
         try{
-            interaction.member.setNickname(username);
-            await interaction.member.setNickname(username);
+            await syncRoles(interaction.member)
         } catch(err){
-            console.log("unable to change nickname")
             console.log("unable to change nickname of user " + username)
         }
         interaction.reply({content:"You have successfully registered. Enjoy!", ephemeral:true});
