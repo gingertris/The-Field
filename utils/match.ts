@@ -13,19 +13,19 @@ const MatchRepository = AppDataSource.getRepository(Match);
 
 //set times
 const weekdayRule = new RecurrenceRule();
-weekdayRule.dayOfWeek = [new Range(1,5)];
-weekdayRule.hour = [new Range(18,22)];
+weekdayRule.dayOfWeek = [1,2,3,4,5];
+weekdayRule.hour = [18, 19, 20, 21, 22];
 weekdayRule.minute = 0;
 
 
 const weekendRule = new RecurrenceRule();
 weekendRule.dayOfWeek = [0,6];
-weekendRule.hour = [new Range(16,18), 22];
-weekendRule.minute = 0;
+weekendRule.hour = [16, 17, 18, 22];
+weekendRule.minute = 19;
 
 const powerHourRule = new RecurrenceRule();
 powerHourRule.dayOfWeek = [0,6];
-powerHourRule.hour = [new Range(19,21)];
+powerHourRule.hour = [19,20,21];
 powerHourRule.minute = 0;
 
 //set timezones
@@ -71,32 +71,26 @@ export const naPromotionRelegationJob = (client: Client) => scheduleJob(naPromot
 
 const euWeekdayJob = (client: Client) => scheduleJob(euWeekdayRule, async ()=>{
     await createMatches(client, false, Region.EU)
-    console.log("euWeekdayJob");
 })
 
 const euWeekendJob = (client: Client) => scheduleJob(euWeekendRule, async ()=>{
     await createMatches(client, false, Region.EU)
-    console.log("euWeekendJob");
 })
 
 const euPowerHourJob = (client: Client) => scheduleJob(euPowerHourRule, async ()=>{
     await createMatches(client, true, Region.EU)
-    console.log("euPowerHourJob");
 })
 
 const naWeekdayJob = (client: Client) => scheduleJob(naWeekdayRule, async ()=>{
     await createMatches(client, false, Region.NA)
-    console.log("naWeekdayJob");
 })
 
 const naWeekendJob = (client: Client) => scheduleJob(naWeekendRule, async ()=>{
     await createMatches(client, false, Region.NA)
-    console.log("naWeekendJob");
 })
 
 const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, async ()=>{
     await createMatches(client, true, Region.NA)
-    console.log("naPowerHourJob");
 })
 
 export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, euPromotionRelegationJob, naPromotionRelegationJob]
@@ -106,8 +100,6 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //TODO: Make copy of leaderboard before promos and relegations?
     //Also this doesn't check for game quota yet.
-
-    console.log("promoteAndRelegate")
 
     const allTeams = await getTeams();
 
@@ -167,8 +159,6 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
 }
 
 export const createMatches = async (client: Client, powerHour: boolean, region:Region) => {
-
-    console.log("createMatches")
 
     const allQueue = await getFullQueue();
     const queues:[Queue[]] = [[]];
