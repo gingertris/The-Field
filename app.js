@@ -23,7 +23,7 @@ client.once(Events.ClientReady, () => {
 
 	//start web server
 
-	const port = 8000;
+	const port = 80;
 	const app = express()
 	app.set('view engine', 'ejs')
 	app.set('views', './views')
