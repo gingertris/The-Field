@@ -43,7 +43,7 @@ router.get('/na/open', async (req, res) => {
 
     res.render('leaderboard.ejs', {
         name:name,
-        title:"EU - Open Division",
+        title:"NA - Open Division",
         teams:teams
     })
     
@@ -57,7 +57,7 @@ router.get('/na/closed', async (req, res) => {
 
     res.render('leaderboard.ejs', {
         name:name,
-        title:"EU - Open Division",
+        title:"NA - Closed Division",
         teams:teams
     })
     
