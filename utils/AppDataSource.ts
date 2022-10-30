@@ -5,6 +5,7 @@ import { Team } from "../entity/team"
 import { Invite } from "../entity/invite"
 import { Match } from "../entity/match"
 import { Queue } from "../entity/queue"
+import { Archive } from "../entity/archive"
 dotenv.config()
 
 const AppDataSource = new DataSource({
@@ -14,7 +15,7 @@ const AppDataSource = new DataSource({
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
-    entities:[Player, Team, Invite, Match, Queue],
+    entities:[Player, Team, Invite, Match, Queue, Archive],
     synchronize: true
 })
 

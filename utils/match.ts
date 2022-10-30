@@ -5,6 +5,7 @@ import { Match } from '../entity/match';
 import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
+import { archive } from './archive';
 import { Division, Region } from './enums';
 import { editTeamDivision, getTeamByID, getTeams, resetTeam } from './helpers';
 import { emptyQueue, getFullQueue } from './queue';
@@ -99,6 +100,9 @@ export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, n
 export const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //TODO: Make copy of leaderboard before promos and relegations?
+
+    await archive(region);
+
     //Also this doesn't check for game quota yet.
 
     const allTeams = await getTeams();
