@@ -9,6 +9,8 @@ Closed Division capped at 16 teams (but may increase with more users). Open Divi
 
 *For Season 1, all teams who have qualified for an RLCS 22-23 Closed Qualifier are invited to join Closed Division.*
 
+*For Tris' Field - University League, all teams who have qualified for UR 22-23 Winter are invited to join Closed Division.*
+
 At the start of each month, all teams reset to 1000 points. Players can gain/lose rating throughout the month. 
 
 At the end of the month, **Top 4 from Open Division promote to Closed Division**, and **Bottom 4 of Closed Division relegate to Open Division**.
