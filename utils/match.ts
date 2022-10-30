@@ -49,23 +49,16 @@ const naPowerHourRule = structuredClone(powerHourRule);
 naPowerHourRule.tz = 'America/Cancun';
 
 const promotionRelegationRule = new RecurrenceRule();
-promotionRelegationRule.date = 1;
+promotionRelegationRule.date = 10; //do it at 10am eu time. no queues are open at this hour, and both days have finished
 promotionRelegationRule.hour = 0;
 promotionRelegationRule.minute = 0;
 
-const euPromotionRelegationRule = structuredClone(promotionRelegationRule);
-euPromotionRelegationRule.tz = 'Europe/Berlin'
+promotionRelegationRule.tz = 'Europe/Berlin'
 
-const naPromotionRelegationRule = structuredClone(promotionRelegationRule);
-naPromotionRelegationRule.tz = 'America/Cancun'
-
-export const euPromotionRelegationJob = (client: Client) => scheduleJob(euPromotionRelegationRule, async () =>{
-    await promoteAndRelegate(client, Region.EU);
+export const promotionRelegationJob = (client: Client) => scheduleJob(promotionRelegationRule, async () =>{
+    await promoteAndRelegate(client);
 })
 
-export const naPromotionRelegationJob = (client: Client) => scheduleJob(naPromotionRelegationRule, async () =>{
-    await promoteAndRelegate(client, Region.NA);
-})
 
 
 //methods
@@ -94,10 +87,10 @@ const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, async ()
     await createMatches(client, true, Region.NA)
 })
 
-export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, euPromotionRelegationJob, naPromotionRelegationJob]
+export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, promotionRelegationJob]
 //remember to add , euPromotionRelegationJob, naPromotionRelegationJob back
 
-export const promoteAndRelegate = async (client: Client, region:Region) => {
+export const promoteAndRelegate = async (client: Client) => {
 
     //TODO: Make copy of leaderboard before promos and relegations?
 
@@ -105,58 +98,62 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //Also this doesn't check for game quota yet.
 
-    const allTeams = await getTeams();
+    for(const region in Region){
+        const allTeams = await getTeams();
 
-    let openTeams = allTeams.filter(t => t.region == region && t.division == Division.OPEN);
+        let openTeams = allTeams.filter(t => t.region == region as Region && t.division == Division.OPEN);
 
-    let closedTeams = allTeams.filter(t => t.region == region && t.division == Division.OPEN);
+        let closedTeams = allTeams.filter(t => t.region == region as Region && t.division == Division.CLOSED);
 
-    //sort teams
-    openTeams = openTeams.sort((a,b)=>{
-        //highest first
-        return b.rating - a.rating
-    })
+        //sort teams
+        openTeams = openTeams.sort((a,b)=>{
+            //highest first
+            return b.rating - a.rating
+        })
 
-    closedTeams = closedTeams.sort((a,b)=>{
-        //lowest first
-        return a.rating - b.rating
-    })
+        closedTeams = closedTeams.sort((a,b)=>{
+            //lowest first
+            return a.rating - b.rating
+        })
 
-    //promote open teams
-    let teamsToSwap = 4;
-    if(closedTeams.length < 16) teamsToSwap = 16 - closedTeams.length; //if closed is empty then fill up closed div
-    for(let i=0; i<(openTeams.length < teamsToSwap ? openTeams.length : teamsToSwap); i++){ //prevent index out of range if not many teams, lol
+        //promote open teams
+        let teamsToSwap = 4;
+        if(closedTeams.length < 16) teamsToSwap = 16 - closedTeams.length; //if closed is empty then fill up closed div
+        for(let i=0; i<(openTeams.length < teamsToSwap ? openTeams.length : teamsToSwap); i++){ //prevent index out of range if not many teams, lol
 
-        const team = openTeams[i];
- 
-        await editTeamDivision(team, Division.CLOSED);
-        await resetTeam(team);
-        team.players.forEach(async player => {
-            try{
-                (await client.users.fetch(player.id)).send("Congratulations, your team has been promoted to Closed Division!")
-            } catch(err){
-                console.log(err)
-            }
-        });
-    }
-
-
-    //if closed full, demote. this may change
-    if(closedTeams.length >= 16){
-        for(let i=0; i<teamsToSwap; i++){
-            const team = await getTeamByID(closedTeams[i].id);
-            await editTeamDivision(team, Division.OPEN);
+            const team = openTeams[i];
+    
+            await editTeamDivision(team, Division.CLOSED);
             await resetTeam(team);
             team.players.forEach(async player => {
                 try{
-                    (await client.users.fetch(player.id)).send("You have been demoted to Open Division.")
-                }catch(err:unknown){
-                    console.log(err)                    
+                    (await client.users.fetch(player.id)).send("Congratulations, your team has been promoted to Closed Division!")
+                } catch(err){
+                    console.log(err)
                 }
-                
             });
         }
+
+
+        //if closed full, demote. this may change
+        if(closedTeams.length >= 16){
+            for(let i=0; i<teamsToSwap; i++){
+                const team = await getTeamByID(closedTeams[i].id);
+                await editTeamDivision(team, Division.OPEN);
+                await resetTeam(team);
+                team.players.forEach(async player => {
+                    try{
+                        (await client.users.fetch(player.id)).send("You have been demoted to Open Division.")
+                    }catch(err:unknown){
+                        console.log(err)                    
+                    }
+                    
+                });
+            }
+        }
     }
+
+    
 
 
 
