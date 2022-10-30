@@ -117,8 +117,7 @@ router.get('/archive/:year/:month/:region/:division', async (req, res) => {
     //jan = 0 in code, lol
     monthInt -= 1;
 
-    const region_yearmonth = `${regionStr}_${yearInt}${monthInt}`
-#
+    const region_yearmonth = `${regionStr}_${yearInt}${monthInt}`;
 
     let archive;
     try{
@@ -131,7 +130,7 @@ router.get('/archive/:year/:month/:region/:division', async (req, res) => {
     let teams = archive.teams;
     
     teams = teams.filter(t => t.region == regionStr as Region && t.division == divisionStr as Division && t.gamesPlayed > minGamesPlayed).sort((a,b) => {return b.rating - a.rating})
-#
+
     res.render('leaderboard.ejs', {
         name:name,
         title:`${archive.name} - ${divisionStr} Division`,

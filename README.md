@@ -17,6 +17,20 @@ At the end of the month, **Top 4 from Open Division promote to Closed Division**
 
 You will need to play 10 games in a month to be eligible for prizing and promotion. *Prizes to be determined, this is all hypothetical so far. I do not have money*
 
+# Leaderboards
+
+Leaderboards for Tris' Field can be found at `https://quietandfalling.xyz/<region>/<division>`.
+
+- `<region>` must be either `EU` or `NA`.
+- `<division>` must be either `open` or `closed`.
+
+
+Archives of previous months' leaderboards can be found at `https://quietandfalling.xyz/archive/<year>/<month>/<region>/<division>`.
+
+- `<year>` and `<month>` must both be numbers. `<year>` is in the format `YYYY`, `<month>` in the format `MM`. January = 01, December = 12 
+
+Leaderboards for Tris' Field - University League can be found at `https://uni.quietandfalling.xyz`. The same format applies for archived leaderboards.
+
 # Opening times
 
 The following times assume these timezones:
