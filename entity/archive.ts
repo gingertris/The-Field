@@ -4,10 +4,10 @@ import { Team } from "./team";
 @Entity()
 export class Archive{
 
-    //when getting/setting, always use format REGION_YYYYM(M) e.g. EU_20229 or EU_202210
+    //when getting/setting, always use format YYYYM(M) e.g. 20229 or 202210
     //Jan = 0
     @PrimaryColumn()
-    region_yearmonth: string
+    yearmonth: string
 
     @Column()
     name: string

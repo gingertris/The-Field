@@ -1,0 +1,46 @@
+<%- include('header') %>
+<div class="d-grid gap-3 p-3">
+    <div class="p-2">
+        <h1><%= team.name %> </h1>
+    </div>
+
+    <div class="p-2">
+        <h3>Captain</h3>
+        <div><%= captain_name %> </div>
+    </div>
+
+    <div class="p-2">
+        <h3>Members</h3>
+        <ul>
+            <% team.players.forEach(p => { %>
+            <li>
+                <%= p.username %> 
+            </li>
+            <% }) %>
+        </ul>
+    </div>
+
+    <div class="p-2">
+        <h3>Region</h3>
+        <p><%= team.region %> </p>
+    </div>
+
+    <div class="p-2">
+        <h3>Division</h3>
+        <p>
+            <%= team.division %>
+        </p>
+    </div>
+
+    <div class="p-2">
+        <h3>Rating</h3>
+        <p>
+            <%= team.rating %>
+        </p>
+    </div>
+
+</div>
+
+
+
+<%- include('footer') %> 

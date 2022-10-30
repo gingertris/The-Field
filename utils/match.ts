@@ -101,7 +101,7 @@ export const promoteAndRelegate = async (client: Client, region:Region) => {
 
     //TODO: Make copy of leaderboard before promos and relegations?
 
-    await archive(region);
+    await archive();
 
     //Also this doesn't check for game quota yet.
 

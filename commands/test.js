@@ -9,9 +9,9 @@ export default {
         .setDescription("Test command"),
     async execute(interaction){
 
-        await archive(Region.EU);
+        await archive();
 
-        const archived = await getArchive("EU_20228");
+        const archived = await getArchive("20228");
         console.log(archived);
         console.log(archived.teams.map(t => t.players))
         await interaction.reply('Tested!');

@@ -5,8 +5,8 @@ import { getTeams } from "./helpers";
 
 const ArchiveRepository = AppDataSource.getRepository(Archive);
 
-export const archive = async (region:Region) => {
-    const teams = (await getTeams()).filter(t => t.region == region);
+export const archive = async () => {
+    const teams = await getTeams();
 
     const now = new Date();
 
@@ -17,7 +17,7 @@ export const archive = async (region:Region) => {
     now.setMonth(now.getMonth()-1)
 
 
-    const region_yearmonth = `${region.toString()}_${now.getFullYear()}${now.getMonth()}`
+    const yearmonth = `${now.getFullYear()}${now.getMonth()}`
 
     const name = `${now.toLocaleString('default', {month:'short'})} ${now.getFullYear()}`
 
@@ -25,16 +25,16 @@ export const archive = async (region:Region) => {
 
 
     archive.teams = teams;
-    archive.region_yearmonth = region_yearmonth
+    archive.yearmonth = yearmonth
     archive.name = name;
 
     await ArchiveRepository.save(archive);
 }
 
-export const getArchive = async (region_yearmonth:string) => {
+export const getArchive = async (yearmonth:string) => {
     const archive = await ArchiveRepository.findOne({
         where:{
-            region_yearmonth:region_yearmonth
+            yearmonth:yearmonth
         }
     });
     if(archive) return archive;
