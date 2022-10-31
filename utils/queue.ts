@@ -1,7 +1,8 @@
-import {ButtonInteraction} from 'discord.js'
+import {ButtonInteraction, ChannelType, Client} from 'discord.js'
 import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
+import { Region } from './enums';
 import { getPlayer, getTeamByID} from './helpers';
 
 const QueueRepository = AppDataSource.getRepository(Queue);
@@ -127,4 +128,52 @@ const leaveQueue = async (id:number) => {
     await QueueRepository.remove(queue);
 
 
+}
+
+export const openQueue = async (client:Client, region:Region) => {
+    const queueChannelId = process.env.CHANNEL_QUEUE;
+    if(!queueChannelId) throw new Error("CHANNEL_QUEUE not in env");
+
+    const euId = process.env.ROLE_EU;
+    if(!euId) throw new Error("ROLE_EU not in env");
+
+    const naId = process.env.ROLE_NA;
+    if(!naId) throw new Error("ROLE_NA not in env");
+
+    const queueChannel = await client.channels.fetch(queueChannelId);
+    if(!queueChannel) throw new Error(`Channel with ID ${queueChannelId} not found`);
+
+    if(queueChannel.type != ChannelType.GuildText) throw new Error(`Channel with ID ${queueChannelId} is not of type GuildText`);
+
+    let roleId;
+    if(region == Region.EU) roleId = euId;
+    if(region == Region.NA) roleId = naId;
+    if(!roleId) throw new Error("region scuffed LOL (this shouldnt happen but if it does something went bad)")
+    
+    await queueChannel.permissionOverwrites.edit(roleId, {ViewChannel:true})
+    
+}
+
+export const closeQueue = async (client:Client, region:Region) => {
+    const queueChannelId = process.env.CHANNEL_QUEUE;
+    if(!queueChannelId) throw new Error("CHANNEL_QUEUE not in env");
+
+    const euId = process.env.ROLE_EU;
+    if(!euId) throw new Error("ROLE_EU not in env");
+
+    const naId = process.env.ROLE_NA;
+    if(!naId) throw new Error("ROLE_NA not in env");
+
+    const queueChannel = await client.channels.fetch(queueChannelId);
+    if(!queueChannel) throw new Error(`Channel with ID ${queueChannelId} not found`);
+
+    if(queueChannel.type != ChannelType.GuildText) throw new Error(`Channel with ID ${queueChannelId} is not of type GuildText`);
+
+    let roleId;
+    if(region == Region.EU) roleId = euId;
+    if(region == Region.NA) roleId = naId;
+    if(!roleId) throw new Error("region scuffed LOL (this shouldnt happen but if it does something went bad)")
+    
+    await queueChannel.permissionOverwrites.edit(roleId, {ViewChannel:false})
+    
 }

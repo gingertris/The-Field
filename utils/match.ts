@@ -1,6 +1,5 @@
 import { randomBytes } from 'crypto';
 import { Client, EmbedBuilder } from 'discord.js';
-import {scheduleJob, RecurrenceRule, Range} from'node-schedule';
 import { Match } from '../entity/match';
 import { Queue } from '../entity/queue';
 import { Team } from '../entity/team';
@@ -11,84 +10,6 @@ import { editTeamDivision, getTeamByID, getTeams, resetTeam } from './helpers';
 import { emptyQueue, getFullQueue } from './queue';
 
 const MatchRepository = AppDataSource.getRepository(Match);
-
-//set times
-const weekdayRule = new RecurrenceRule();
-weekdayRule.dayOfWeek = [1,2,3,4,5];
-weekdayRule.hour = [18, 19, 20, 21, 22];
-weekdayRule.minute = 0;
-
-
-const weekendRule = new RecurrenceRule();
-weekendRule.dayOfWeek = [0,6];
-weekendRule.hour = [16, 17, 18, 22];
-weekendRule.minute = 0;
-
-const powerHourRule = new RecurrenceRule();
-powerHourRule.dayOfWeek = [0,6];
-powerHourRule.hour = [19,20,21];
-powerHourRule.minute = 0;
-
-//set timezones
-const euWeekdayRule = structuredClone(weekdayRule);
-euWeekdayRule.tz = 'Europe/Berlin';
-
-const euWeekendRule = structuredClone(weekendRule);
-euWeekendRule.tz = 'Europe/Berlin';
-
-const euPowerHourRule = structuredClone(powerHourRule);
-euPowerHourRule.tz = 'Europe/Berlin';
-
-const naWeekdayRule = structuredClone(weekdayRule);
-naWeekdayRule.tz = 'America/Cancun';
-
-const naWeekendRule = structuredClone(weekendRule);
-naWeekendRule.tz = 'America/Cancun';
-
-const naPowerHourRule = structuredClone(powerHourRule);
-naPowerHourRule.tz = 'America/Cancun';
-
-const promotionRelegationRule = new RecurrenceRule();
-promotionRelegationRule.date = 10; //do it at 10am eu time. no queues are open at this hour, and both days have finished
-promotionRelegationRule.hour = 0;
-promotionRelegationRule.minute = 0;
-
-promotionRelegationRule.tz = 'Europe/Berlin'
-
-export const promotionRelegationJob = (client: Client) => scheduleJob(promotionRelegationRule, async () =>{
-    await promoteAndRelegate(client);
-})
-
-
-
-//methods
-
-const euWeekdayJob = (client: Client) => scheduleJob(euWeekdayRule, async ()=>{
-    await createMatches(client, false, Region.EU)
-})
-
-const euWeekendJob = (client: Client) => scheduleJob(euWeekendRule, async ()=>{
-    await createMatches(client, false, Region.EU)
-})
-
-const euPowerHourJob = (client: Client) => scheduleJob(euPowerHourRule, async ()=>{
-    await createMatches(client, true, Region.EU)
-})
-
-const naWeekdayJob = (client: Client) => scheduleJob(naWeekdayRule, async ()=>{
-    await createMatches(client, false, Region.NA)
-})
-
-const naWeekendJob = (client: Client) => scheduleJob(naWeekendRule, async ()=>{
-    await createMatches(client, false, Region.NA)
-})
-
-const naPowerHourJob = (client: Client) => scheduleJob(naPowerHourRule, async ()=>{
-    await createMatches(client, true, Region.NA)
-})
-
-export const Jobs = [euWeekdayJob, euWeekendJob, euPowerHourJob, naWeekdayJob, naWeekendJob, naPowerHourJob, promotionRelegationJob]
-//remember to add , euPromotionRelegationJob, naPromotionRelegationJob back
 
 export const promoteAndRelegate = async (client: Client) => {
 

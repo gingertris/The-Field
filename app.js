@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits, Events, Collection } from "discord.js"
 import * as dotenv from 'dotenv'
 import commands from './utils/commands.js'
-import { Jobs } from "./utils/match"
+import { loadJobs } from "./utils/jobs"
 import { handleJoinQueue, handleLeaveQueue } from "./utils/queue"
 import router from './utils/router'
 import express from 'express'
@@ -16,10 +16,7 @@ client.commands = new Collection();
 client.once(Events.ClientReady, () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	//load jobs
-	Jobs.forEach(job=>{
-		job(client);
-		console.log(`Loaded job ${job.name}`)
-	})
+	loadJobs(client);
 
 	//start web server
 

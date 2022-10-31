@@ -1,6 +1,5 @@
 import { Archive } from "../entity/archive";
 import AppDataSource from "./AppDataSource";
-import { Division, Region } from "./enums";
 import { getTeams } from "./helpers";
 
 const ArchiveRepository = AppDataSource.getRepository(Archive);

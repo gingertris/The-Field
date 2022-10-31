@@ -1,8 +1,8 @@
 import { Client, EmbedBuilder } from 'discord.js';
 import EloRank from 'elo-rank';
 import { Match } from '../entity/match';
-import { getTeamByID, setTeamGamesPlayed, setTeamRating } from './helpers';
-import { getMatch, updateMatch } from './match';
+import { setTeamGamesPlayed, setTeamRating } from './helpers';
+import { updateMatch } from './match';
 
 type winnerType = 1 | 2
 
