@@ -177,3 +177,42 @@ export const closeQueue = async (client:Client, region:Region) => {
     await queueChannel.permissionOverwrites.edit(roleId, {ViewChannel:false})
     
 }
+
+export const syncQueue = async (client:Client) => { //only do this on load.
+    const now = new Date();
+
+    //eu
+    const euTime = structuredClone(now);
+    euTime.setHours(euTime.getHours() + 1)
+    if(euTime.getDay() < 6){ //weekday
+        if(euTime.getUTCHours() < 18 || euTime.getUTCHours() > 22){
+            await closeQueue(client, Region.EU);
+        } else{
+            await openQueue(client, Region.EU);
+        }
+    } else{ //weekend
+        if(euTime.getUTCHours() < 16 || euTime.getUTCHours() > 22){
+            await closeQueue(client, Region.EU);
+        } else{
+            await openQueue(client, Region.EU);
+        }
+    }
+
+    //na
+    const naTime = structuredClone(now);
+    naTime.setHours(euTime.getHours() - 5)
+    if(naTime.getDay() < 6){ //weekday
+        if(naTime.getUTCHours() < 18 || naTime.getUTCHours() > 22){
+            await closeQueue(client, Region.NA);
+        } else{
+            await openQueue(client, Region.NA);
+        }
+    } else{ //weekend
+        if(naTime.getUTCHours() < 16 || naTime.getUTCHours() > 22){
+            await closeQueue(client, Region.NA);
+        } else{
+            await openQueue(client, Region.NA);
+        }
+    }
+
+}

@@ -2,7 +2,7 @@ import { Client, GatewayIntentBits, Events, Collection } from "discord.js"
 import * as dotenv from 'dotenv'
 import commands from './utils/commands.js'
 import { loadJobs } from "./utils/jobs"
-import { handleJoinQueue, handleLeaveQueue } from "./utils/queue"
+import { handleJoinQueue, handleLeaveQueue, syncQueue } from "./utils/queue"
 import router from './utils/router'
 import express from 'express'
 dotenv.config()
@@ -13,10 +13,13 @@ const client = new Client({intents:[GatewayIntentBits.Guilds]});
 client.commands = new Collection();
 
 //on discord ready
-client.once(Events.ClientReady, () => {
+client.once(Events.ClientReady, async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	//load jobs
 	loadJobs(client);
+
+	//sync queue role perms
+	await syncQueue(client);
 
 	//start web server
 
