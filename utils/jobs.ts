@@ -108,6 +108,9 @@ export const loadJobs = (client: Client) => {
 
     scheduleJob(emptyQueueRule, async ()=>{
         await emptyQueue();
+        const now = new Date();
+        console.log("Queues cleared.")
+        console.log(now.toUTCString())
     })
 
     //create matches
