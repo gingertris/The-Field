@@ -131,6 +131,10 @@ const leaveQueue = async (id:number) => {
 }
 
 export const openQueue = async (client:Client, region:Region) => {
+    
+
+    emptyQueue()
+
     const queueChannelId = process.env.CHANNEL_QUEUE;
     if(!queueChannelId) throw new Error("CHANNEL_QUEUE not in env");
 

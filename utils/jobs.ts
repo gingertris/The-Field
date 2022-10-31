@@ -2,7 +2,7 @@ import { Client } from "discord.js";
 import { RecurrenceRule, scheduleJob } from "node-schedule";
 import { Region } from "./enums";
 import { createMatches, promoteAndRelegate } from "./match";
-import { closeQueue, openQueue } from "./queue";
+import { closeQueue, emptyQueue, openQueue } from "./queue";
 
 //set 
 
@@ -85,12 +85,18 @@ euCloseRule.tz = 'Europe/Berlin';
 
 //promotion/relegation job
 const promotionRelegationRule = new RecurrenceRule();
-promotionRelegationRule.date = 10; //do it at 10am eu time. no queues are open at this hour, and both days have finished
-promotionRelegationRule.hour = 0;
+promotionRelegationRule.date = 1; 
+promotionRelegationRule.hour = 10;//do it at 10am eu time. no queues are open at this hour, and both days have finished
 promotionRelegationRule.minute = 0;
 
 promotionRelegationRule.tz = 'Europe/Berlin'
 
+
+//empty queue overnight
+const emptyQueueRule = new RecurrenceRule(); //do it at 10am eu time. no queues are open at this hour, and both days have finished
+emptyQueueRule.hour = 10;
+emptyQueueRule.minute = 0;
+emptyQueueRule.tz = 'Europe/Berlin'
 
 //method
 
@@ -98,6 +104,10 @@ export const loadJobs = (client: Client) => {
     //promotion and relegation
     scheduleJob(promotionRelegationRule, async () =>{
         await promoteAndRelegate(client);
+    })
+
+    scheduleJob(emptyQueueRule, async ()=>{
+        await emptyQueue();
     })
 
     //create matches
