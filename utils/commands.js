@@ -13,6 +13,7 @@ import Transfer from '../commands/transfer.js'
 import Kick from '../commands/kick.js'
 import Gen from '../commands/gen.js'
 import Report from '../commands/report.js'
+import SetDiv from '../commands/setdiv.js'
 const Commands = [
     Test,
     Create,
@@ -28,7 +29,8 @@ const Commands = [
     Transfer,
     Kick,
     Gen,
-    Report
+    Report,
+    SetDiv
 ]
 
 export default Commands
