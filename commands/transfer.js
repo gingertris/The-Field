@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { getPlayer, transferOwnership , captainCheck, getTeam, getTeamByID} from "../utils/helpers";
+import { getPlayer, transferOwnership , captainCheck, getTeamByID} from "../utils/helpers";
 
 export default {
     data: new SlashCommandBuilder()

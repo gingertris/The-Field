@@ -22,5 +22,7 @@ export default {
 
         interaction.channel.send({ components: [row]});
 
+        interaction.reply({content:"Buttons generated.", ephemeral:true})
+
     }
 }

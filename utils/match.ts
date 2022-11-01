@@ -6,7 +6,7 @@ import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
 import { archive } from './archive';
 import { Division, Region } from './enums';
-import { editTeamDivision, getTeamByID, getTeams, resetTeam } from './helpers';
+import { editTeamDivision, getTeamByID, getTeams, resetTeam, syncRoles } from './helpers';
 import { emptyQueue, getFullQueue } from './queue';
 
 const MatchRepository = AppDataSource.getRepository(Match);
@@ -48,6 +48,9 @@ export const promoteAndRelegate = async (client: Client) => {
             await resetTeam(team);
             team.players.forEach(async player => {
                 try{
+                    const guildId = process.env.GUILD_ID;
+                    if(!guildId) throw new Error("GUILD_ID not found in env")
+                    await syncRoles(await (await client.guilds.fetch(guildId)).members.fetch(player.id));
                     (await client.users.fetch(player.id)).send("Congratulations, your team has been promoted to Closed Division!")
                 } catch(err){
                     console.log(err)
