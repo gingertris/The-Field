@@ -186,8 +186,14 @@ export const transferOwnership = async (team:Team, player:Player) => {
 }
 
 export const syncRoles = async (member:GuildMember) => {
-    const player = await getPlayer(member.user.id);
-    
+    let player;
+    try {
+        player = await getPlayer(member.user.id)
+    } catch{
+        console.log(`Player with Id ${member.user.id} not found`)
+        return;
+    }
+
     if(!(process.env.ROLE_EU && process.env.ROLE_NA && process.env.ROLE_EU_OPEN && process.env.ROLE_NA_OPEN && process.env.ROLE_NA_CLOSED && process.env.ROLE_EU_CLOSED && process.env.ROLE_REGISTERED)) throw new Error("Role IDs not in environment") //check all roles loaded in
     
     const roles = {

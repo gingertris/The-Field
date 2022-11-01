@@ -38,8 +38,17 @@ export default {
         const divisionEnum =  division == "OPEN" ? Division.OPEN : Division.CLOSED
 
         await editTeamDivision(team, divisionEnum)
+
+        const guildId = process.env.GUILD_ID;
+        if(!guildId) throw new Error("GUILD_ID not defined in env")
+
         team.players.forEach(async (player) => {
-            await syncRoles(player);
+            try{
+                await syncRoles(await (await interaction.client.guilds.fetch(guildId)).members.fetch(player.id));
+            } catch(e){
+                console.log(e);
+            }
+            
         })
 
         interaction.reply({content:"Team updated.", ephemeral:true})
