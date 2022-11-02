@@ -133,6 +133,10 @@ Gives you player information. If `@User` is omitted, it gives you your own infor
 
 Gives you information on a team. If `"Team name"` is omitted, it gives you information on your own team. Captain, team members, region, division and rating.
 
+`/pings on|off`
+
+Toggle pings for queue.
+
 ## Mod Commands
 
 `/setdiv "Team name" <division>`
