@@ -1,5 +1,5 @@
 # Tris' Field
-My attempt at a recreation of Psyonix x Rival Esports' The Field.
+My attempt at a recreation of Psyonix and Rival Esports' The Field.
 
 # How will Tris’ Field work?
 
@@ -133,9 +133,18 @@ Gives you player information. If `@User` is omitted, it gives you your own infor
 
 Gives you information on a team. If `"Team name"` is omitted, it gives you information on your own team. Captain, team members, region, division and rating.
 
+## Mod Commands
 
-<ins>Ideas
+`/setdiv "Team name" <division>`
 
-Separate Join / Leave queue button in a Read Only queue channel. Queue will fail if you are not in a team. If someone else in your team queued, you can still leave the queue.
+Change the division of a team.
 
-Register EU / NA buttons, must be registered before aforementioned queue button channel visible.
+`/undo <match id>`
+
+Undo a match.
+
+<ins>
+Development status
+</ins>
+
+Currently, this project is in a state where it runs. However I'm not happy with the code and I feel like I can make it better knowing what I've learnt when making this prototype. At the moment, the bot runs the code found in this repository, however the new repository can be found at https://github.com/gingertris/tris-field. Once the new version has been made and is running, this repository will be made private.
