@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import { ChannelType, Client } from "discord.js";
 import { RecurrenceRule, scheduleJob } from "node-schedule";
 import { Region } from "./enums";
 import { createMatches, promoteAndRelegate } from "./match";
@@ -144,30 +144,64 @@ export const loadJobs = (client: Client) => {
     //eu
     scheduleJob(euWeekdayOpenRule, async ()=>{
         await openQueue(client, Region.EU);
+        await ping(client, Region.EU, "open");
     })
 
     scheduleJob(euWeekendOpenRule, async ()=>{
         await openQueue(client, Region.EU);
+        await ping(client, Region.EU, "open");
     })
 
     scheduleJob(euCloseRule, async ()=>{
         await closeQueue(client, Region.EU);
+        await ping(client, Region.EU, "closed");
     })
     
 
     //na
     scheduleJob(naWeekdayOpenRule, async ()=>{
         await openQueue(client, Region.NA);
+        await ping(client, Region.NA, "open");
     })
 
     scheduleJob(naWeekendOpenRule, async ()=>{
         await openQueue(client, Region.NA);
+        await ping(client, Region.NA, "open");
     })
 
     scheduleJob(naCloseRule, async ()=>{
         await closeQueue(client, Region.NA);
+        await ping(client, Region.NA, "closed");
     })
 
     console.log("Jobs loaded.")
 
+}
+
+const ping = async (client:Client, region:Region, openorclosed:string) => {
+    const naPings = process.env.CHANNEL_NA_PINGS;
+    if(!naPings) throw new Error("CHANNEL_NA_PINGS not in env")
+
+    const euPings = process.env.CHANNEL_EU_PINGS;
+    if(!euPings) throw new Error("CHANNEL_EU_PINGS not in env")
+
+    const pingsRoleId = process.env.ROLE_PINGS;
+    if(!pingsRoleId) throw new Error("ROLE_PINGS not in env")
+
+    if(region == Region.EU) {
+        const pingChannel = await client.channels.fetch(euPings);
+        if(pingChannel?.type == ChannelType.GuildText){
+            await pingChannel.send({
+                content:`The queue is now ${openorclosed}. <@&${pingsRoleId}>`
+            });
+        }
+    };
+    if(region == Region.NA) {
+        const pingChannel = await client.channels.fetch(naPings);
+        if(pingChannel?.type == ChannelType.GuildText){
+            await pingChannel.send({
+                content:`The queue is now ${openorclosed}. <@&${pingsRoleId}>`
+            });
+        }
+    };
 }

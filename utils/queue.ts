@@ -144,39 +144,14 @@ export const openQueue = async (client:Client, region:Region) => {
     const naId = process.env.ROLE_NA;
     if(!naId) throw new Error("ROLE_NA not in env");
 
-    const naPings = process.env.CHANNEL_NA_PINGS;
-    if(!naPings) throw new Error("CHANNEL_NA_PINGS not in env")
-
-    const euPings = process.env.CHANNEL_EU_PINGS;
-    if(!euPings) throw new Error("CHANNEL_EU_PINGS not in env")
-
-    const pingsRoleId = process.env.ROLE_PINGS;
-    if(!pingsRoleId) throw new Error("ROLE_PINGS not in env")
-
     const queueChannel = await client.channels.fetch(queueChannelId);
     if(!queueChannel) throw new Error(`Channel with ID ${queueChannelId} not found`);
 
     if(queueChannel.type != ChannelType.GuildText) throw new Error(`Channel with ID ${queueChannelId} is not of type GuildText`);
 
     let roleId;
-    if(region == Region.EU) {
-        roleId = euId;
-        const pingChannel = await client.channels.fetch(euPings);
-        if(pingChannel?.type == ChannelType.GuildText){
-            await pingChannel.send({
-                content:`The queue is now open. <@&${pingsRoleId}>`
-            });
-        }
-    };
-    if(region == Region.NA) {
-        roleId = naId;
-        const pingChannel = await client.channels.fetch(naPings);
-        if(pingChannel?.type == ChannelType.GuildText){
-            await pingChannel.send({
-                content:`The queue is now open. <@&${pingsRoleId}>`
-            });
-        }
-    };
+    if(region == Region.EU) roleId = euId;
+    if(region == Region.NA) roleId = naId;
     if(!roleId) throw new Error("region scuffed LOL (this shouldnt happen but if it does something went bad)")
     
     await queueChannel.permissionOverwrites.edit(roleId, {ViewChannel:true})
@@ -193,39 +168,14 @@ export const closeQueue = async (client:Client, region:Region) => {
     const naId = process.env.ROLE_NA;
     if(!naId) throw new Error("ROLE_NA not in env");
 
-    const naPings = process.env.CHANNEL_NA_PINGS;
-    if(!naPings) throw new Error("CHANNEL_NA_PINGS not in env")
-
-    const euPings = process.env.CHANNEL_EU_PINGS;
-    if(!euPings) throw new Error("CHANNEL_EU_PINGS not in env")
-
-    const pingsRoleId = process.env.ROLE_PINGS;
-    if(!pingsRoleId) throw new Error("ROLE_PINGS not in env")
-
     const queueChannel = await client.channels.fetch(queueChannelId);
     if(!queueChannel) throw new Error(`Channel with ID ${queueChannelId} not found`);
 
     if(queueChannel.type != ChannelType.GuildText) throw new Error(`Channel with ID ${queueChannelId} is not of type GuildText`);
 
     let roleId;
-    if(region == Region.EU) {
-        roleId = euId;
-        const pingChannel = await client.channels.fetch(euPings);
-        if(pingChannel?.type == ChannelType.GuildText){
-            await pingChannel.send({
-                content:`The queue is now closed. <@&${pingsRoleId}>`
-            });
-        }
-    };
-    if(region == Region.NA) {
-        roleId = naId;
-        const pingChannel = await client.channels.fetch(naPings);
-        if(pingChannel?.type == ChannelType.GuildText){
-            await pingChannel.send({
-                content:`The queue is now closed. <@&${pingsRoleId}>`
-            });
-        }
-    };
+    if(region == Region.EU) roleId = euId;
+    if(region == Region.NA) roleId = naId;
     if(!roleId) throw new Error("region scuffed LOL (this shouldnt happen but if it does something went bad)")
     
     await queueChannel.permissionOverwrites.edit(roleId, {ViewChannel:false})
