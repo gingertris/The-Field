@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from "discord.js";
 import { archive, getArchive } from "../utils/archive";
 import { Region } from "../utils/enums";
 import { createMatches } from "../utils/match";
+import { openQueue } from "../utils/queue";
 
 export default {
     data: new SlashCommandBuilder()
@@ -9,7 +10,7 @@ export default {
         .setDescription("Test command"),
     async execute(interaction){
 
-        await createMatches(interaction.client, false, Region.EU);
+        await openQueue(interaction.client, Region.EU)
         await interaction.reply('Tested!');
     }
 }

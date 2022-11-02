@@ -15,6 +15,7 @@ import Gen from '../commands/gen.js'
 import Report from '../commands/report.js'
 import SetDiv from '../commands/setdiv.js'
 import Undo from '../commands/undo.js'
+import pings from '../commands/pings.js'
 const Commands = [
     Test,
     Create,
@@ -32,7 +33,8 @@ const Commands = [
     Gen,
     Report,
     SetDiv,
-    Undo
+    Undo,
+    pings
 ]
 
 export default Commands
