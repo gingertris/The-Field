@@ -14,8 +14,8 @@ export class Match{
     @JoinColumn()
     team2: Team
 
-    @Column({nullable:true})
-    winner_id: number
+    @Column({type: 'int',nullable:true})
+    winner_id: number | null
 
     @Column()
     powerHour: boolean

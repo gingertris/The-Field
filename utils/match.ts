@@ -6,7 +6,7 @@ import { Team } from '../entity/team';
 import AppDataSource from './AppDataSource';
 import { archive } from './archive';
 import { Division, Region } from './enums';
-import { editTeamDivision, getTeamByID, getTeams, resetTeam, syncRoles } from './helpers';
+import { editTeamDivision, getTeamByID, getTeams, resetTeam, setTeamGamesPlayed, setTeamRating, syncRoles } from './helpers';
 import { emptyQueue, getFullQueue } from './queue';
 
 const MatchRepository = AppDataSource.getRepository(Match);
@@ -105,8 +105,16 @@ export const createMatches = async (client: Client, powerHour: boolean, region:R
             })
             const popped = queue.pop() // remove most recent queuer
             if(popped){
-                const user = await client.users.fetch(popped.team.captain_id);
-                user.send("There was an odd number of people in the queue, meaning not everyone could get a matchup. Unfortunately, your team was the last to queue, so you haven't got a matchup.");
+                let user;
+                 try{
+                    user = await client.users.fetch(popped.team.captain_id);
+                    user.send("There was an odd number of people in the queue, meaning not everyone could get a matchup. Unfortunately, your team was the last to queue, so you haven't got a matchup.");
+
+                } catch(err:any){
+                    console.log("cant dm user");
+
+                }
+                
             }
         }
 
@@ -186,4 +194,15 @@ const generatePassword = () => {
 
 export const updateMatch = async (match:Match) => {
     return await MatchRepository.save(match);
+}
+
+export const undoMatch = async (match:Match) => {
+    await setTeamRating(match.team1, match.team1.rating - match.team1difference);
+    await setTeamRating(match.team2, match.team2.rating - match.team2difference);
+    await setTeamGamesPlayed(match.team1, match.team1.gamesPlayed - 1);
+    await setTeamGamesPlayed(match.team2, match.team2.gamesPlayed - 1);
+    match.winner_id = null;
+    match.team1difference = 0;
+    match.team2difference = 0;
+    await MatchRepository.save(match);
 }

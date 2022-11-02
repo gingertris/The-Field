@@ -14,6 +14,7 @@ import Kick from '../commands/kick.js'
 import Gen from '../commands/gen.js'
 import Report from '../commands/report.js'
 import SetDiv from '../commands/setdiv.js'
+import Undo from '../commands/undo.js'
 const Commands = [
     Test,
     Create,
@@ -30,7 +31,8 @@ const Commands = [
     Kick,
     Gen,
     Report,
-    SetDiv
+    SetDiv,
+    Undo
 ]
 
 export default Commands
