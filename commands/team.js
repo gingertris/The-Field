@@ -38,7 +38,8 @@ export default {
                 {name: "Members", value: `${usernames.join("\n")}`},
                 {name: "Region", value: `${team.region}`},
                 {name: "Division", value: `${team.division}`},
-                {name: "Rating", value:`${team.rating}`}
+                {name: "Rating", value:`${team.rating}`},
+                {name: "Remaining additions", value:`${2-team.changes}`}
             )
 
             interaction.reply({embeds:[embed], ephemeral:true})

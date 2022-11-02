@@ -44,4 +44,7 @@ export class Team {
     @OneToMany(() => Queue, (queue) => queue.team, {cascade:true})
     queue:Queue
 
+    @Column({default:0})
+    changes:number;
+
 }

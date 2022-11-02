@@ -60,12 +60,19 @@ export default {
             const invite = await getInvite(parseInt(response.values[0]));
             const team = await getTeamByID(invite.team.id);
             
-            await addPlayerToTeam(player, team);
+            try{
+                await addPlayerToTeam(player, team);
+            } catch(err){
+                interaction.followUp({content:err.message,ephemeral:true});
+                await answerInvite(invite);
+                return;
+            }
+            
             await syncRoles(interaction.member);
             await answerInvite(invite);
             
 
-            interaction.followUp({content:`You have joined "${team.name}"!`,ephemeral:true});
+            interaction.followUp({content:`You have joined "${team.name}"! This team has ${1-team.changes} roster addition${2-team.changes == 1 ? '' : 's'} left this month.`,ephemeral:true});
         }catch(err){
             interaction.followUp({content:`Command timed out.`,ephemeral:true});
         }

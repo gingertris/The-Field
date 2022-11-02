@@ -6,6 +6,7 @@ import { GuildMember } from "discord.js"
 import { Invite } from "../entity/invite";
 
 import * as dotenv from 'dotenv'
+import e from "express";
 dotenv.config()
 
 const PlayerRepository = AppDataSource.getRepository(Player);
@@ -42,10 +43,19 @@ export const registerPlayer = async (id: string,username:string, region: string)
 }
 
 export const addPlayerToTeam = async (player: Player, team: Team) => {
-    player.team = team;
-    await PlayerRepository.save(player).catch(err => {
-        throw err;
-    });
+    if(team.changes < 2){
+        player.team = team;
+        await PlayerRepository.save(player).catch(err => {
+            throw err;
+        });
+        const updatedTeam = await getTeamByID(team.id);
+        updatedTeam.changes += 1;
+        await TeamRepository.save(updatedTeam);
+    } else{
+        throw new Error("This team has already had 2 additions to its roster this month. You can not join this team.")
+    }
+
+
 }
 
 export const leaveTeam = async (player: Player) => {
@@ -93,6 +103,7 @@ export const editTeamDivision = async (team: Team, division:Division) => {
 
 export const resetTeam = async (team:Team) => {
     team.gamesPlayed = 0;
+    team.changes = 0;
     team.rating = 1000;
     await TeamRepository.save(team);
 }
