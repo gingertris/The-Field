@@ -43,7 +43,7 @@ export const registerPlayer = async (id: string,username:string, region: string)
 }
 
 export const addPlayerToTeam = async (player: Player, team: Team) => {
-    if(team.changes < 2){
+    if(team.changes < 5){
         player.team = team;
         await PlayerRepository.save(player).catch(err => {
             throw err;

@@ -39,7 +39,7 @@ export default {
                 {name: "Region", value: `${team.region}`},
                 {name: "Division", value: `${team.division}`},
                 {name: "Rating", value:`${team.rating}`},
-                {name: "Remaining additions", value:`${2-team.changes}`}
+                {name: "Monthly roster additions", value:`${team.changes}`}
             )
 
             interaction.reply({embeds:[embed], ephemeral:true})
