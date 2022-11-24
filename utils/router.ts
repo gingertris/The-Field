@@ -2,7 +2,7 @@ import {Router} from 'express';
 import { getArchive } from './archive';
 import { Division, Region } from './enums';
 import { getPlayer, getTeamByID, getTeams } from './helpers';
-
+import apiRouter from './routes/api'
 const router = Router();
 
 const minGamesPlayed = 0; 
@@ -203,6 +203,8 @@ router.get('/:region/:division', async (req, res) => {
     })
     
 });
+
+router.use("/api", apiRouter)
 
 //The 404 Route (ALWAYS Keep this as the last route)
 router.get('*', function(req, res){
